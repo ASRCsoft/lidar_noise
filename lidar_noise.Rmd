@@ -27,8 +27,9 @@ header-includes:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, eval = TRUE, cache = TRUE,
-                      engine.path = list(python = '/usr/bin/python3'))
+python_path = system('which python3', intern=T)
+knitr::opts_chunk$set(echo = FALSE, eval = FALSE, cache = TRUE,
+                      engine.path = list(python = python_path))
 knitr::knit_engines$set(python = reticulate::eng_python)
 ```
 
