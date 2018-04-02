@@ -30,7 +30,7 @@ header-includes:
 if (file.exists('python_path.txt')) {
   python_path = readLines('python_path.txt')[1]
 } else {
-  python_path = Sys.which('python3', intern=T)
+  python_path = Sys.which('python3')
 }
 knitr::opts_chunk$set(echo = FALSE, eval = FALSE, cache = TRUE,
                       engine.path = list(python = python_path))
