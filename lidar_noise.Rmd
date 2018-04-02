@@ -26,12 +26,18 @@ header-includes:
   - \usepackage{subfig}
 ---
 
-```{r setup, include=FALSE}
-python_path = system('which python3', intern=T)
+```{r setup, echo=TRUE, include=FALSE}
+if (file.exists('python_path.txt')) {
+  python_path = readLines('python_path.txt')[1]
+} else {
+  python_path = Sys.which('python3', intern=T)
+}
 knitr::opts_chunk$set(echo = FALSE, eval = FALSE, cache = TRUE,
                       engine.path = list(python = python_path))
 knitr::knit_engines$set(python = reticulate::eng_python)
 ```
+
+Python is at `r system('which python3', intern=T)`.
 
 # Introduction
 
