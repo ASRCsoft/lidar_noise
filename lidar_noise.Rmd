@@ -32,7 +32,7 @@ if (file.exists('python_path.txt')) {
 } else {
   python_path = Sys.which('python3')
 }
-knitr::opts_chunk$set(echo = FALSE, eval = FALSE, cache = TRUE,
+knitr::opts_chunk$set(echo = FALSE, eval = TRUE, cache = TRUE,
                       engine.path = list(python = python_path))
 knitr::knit_engines$set(python = reticulate::eng_python)
 ```
@@ -260,11 +260,11 @@ Note that the normal `\ref{}` command cannot be used to cite appendix figures an
 The insertion of a sample figure (Fig. \ref{f1})  
 and caption is given below (in the .tex document) and at the end of the document. Standard figure sizes are 19 (one column), 27, 33, and 39 (two columns) picas.
 
-\begin{figure}[h]
- \centerline{\includegraphics[width=19pc]{figure01.pdf}}
-  \caption{Enter the caption for your figure here.  Repeat as
-  necessary for each of your figures.}\label{f1}
-\end{figure}
+<!-- \begin{figure}[h] -->
+<!--  \centerline{\includegraphics[width=19pc]{figure01.pdf}} -->
+<!--   \caption{Enter the caption for your figure here.  Repeat as -->
+<!--   necessary for each of your figures.}\label{f1} -->
+<!-- \end{figure} -->
 
 ```{r,echo=FALSE,fig.cap='test the rmd output',fig.align='center',fig.width=3.17}
 plot(1:10)
