@@ -20,8 +20,10 @@ exauthors:
     currentaddress: "Current address: Some other place, Canada"
 abstract: |
   Wind lidars are widely deployed to measure atmospheric wind speeds. However, wind speed measurements are corrupted by impulse noise when the lidar's laser backscatter is weaker than environmental background noise. We model lidar signal reception as a hidden Markov process that switches between a noise state and a signal state and draw on image processing research to obtain approximate solutions to the model. Using this model we are able to dramatically improve on the current data filtering methods in use for wind lidars.
-bibliography: amstest.bib
-output: rticles::ams_article
+bibliography: lidar_noise.bib
+output:
+  bookdown::pdf_book:
+    base_format: rticles::ams_article
 header-includes:
   - \usepackage{subfig}
 ---
@@ -75,7 +77,7 @@ Existing methods from image segmentation research can estimate hidden markov ran
 
 ## New York State Mesonet lidar network
 
-The New York State Mesonet bought 17 lidars as part of a _____ grant. Before deployment at the chosen profiler locations, the lidars were tested on the roof of the CESTM building at the SUNY Polytechnic Institute. The lidars are usually run in DBS (Doppler Beam Swinging) mode, which records radial wind speeds from a vertical profile and 4 profiles 15 degrees off from vertical in each of the 4 cardinal directions. By combining radial wind speeds from different directions we are able to estimate the u, v, and w components of the wind speed.
+The New York State Mesonet bought 17 lidars as part of a FEMA grant. Before deployment at the chosen profiler locations, the lidars were tested on the roof of the CESTM building at the SUNY Polytechnic Institute. The lidars are usually run in DBS (Doppler Beam Swinging) mode, which records radial wind speeds from a vertical profile and 4 profiles 15 degrees off from vertical in each of the 4 cardinal directions. By combining radial wind speeds from different directions we are able to estimate the u, v, and w components of the wind speed.
 
 The CESTM building also houses the National Weather Service, which releases radiosondes twice a day. 
 
@@ -194,7 +196,27 @@ plt.show()
 
 # Validation
 
-testing against co-located NWS radiosonde data
+We follow the method outlined in @kumera to compare wind lidar estimates to radiosonde wind speed estimates. They compare correlations of wind speed and wind direction from two types of lidars with measurements from a radiosonde launched from a site 2 kilometers away. Because correlations depend on the height of the measurement, they calculate correlations independently for different heights.
+
+We plot Pearson correlation coefficients in figure \@ref(fig:corr). Our results for the CNR threshold method closely match @kumera results for the WindCube 100S, which also uses a CNR threshold to filter data. In particular, we find that at lower altitudes the correlation is weaker, at about $R=.9$, possibly due to swinging motions of the radiosonde sensor. We also observe a drop in the correlation around 1300m, around the top of the cloud level, where valid measurements are often interspersed with noise. Kumera et al. do not report correlations above 2500m. At these high ranges we record another drop in correlation, possibly due to the radiosonde drifting away from the CESTM building.
+
+The hidden markov random field wind correlations are similar, with the exception that the sharp dips in correlations (that we hypothesize are due to valid measurements interspersed with noise) do not appear. The results suggest that data filtered with the hidden markov random field is comparable in quality to data filtered with the CNR threshold method when only small amounts of noise are present.
+
+```{r corr, fig.cap='Pearson correlation of lidar horizontal wind speeds and radiosonde wind speeds at different heights.', fig.width=3.17}
+library(reshape2)
+library(ggplot2)
+
+cnr_df = read.csv('data/cnr_stats.csv')
+hmrf_df = read.csv('data/hmrf_stats.csv')
+ranges = seq(100, 3000, by=25)
+
+corr_df = data.frame(Range=ranges, CNR=cnr_df$corr_u, HMRF=hmrf_df$corr_u)
+lcorr = melt(corr_df, id.vars='Range', variable.name='Method',
+             value.name='Correlation Coefficient')
+names(lcorr)[1] = 'Range [m]'
+ggplot(lcorr, aes(x=`Range [m]`, y=`Correlation Coefficient`, color=Method)) +
+  geom_line() + theme(legend.position="bottom")
+```
 
 
 # Application to lake wind effect
@@ -266,9 +288,6 @@ and caption is given below (in the .tex document) and at the end of the document
 <!--   necessary for each of your figures.}\label{f1} -->
 <!-- \end{figure} -->
 
-```{r,echo=FALSE,fig.cap='test the rmd output',fig.align='center',fig.width=3.17}
-plot(1:10)
-```
 
 ### Tables
 Each table must be numbered, provided with a caption, and mentioned specifically in the text. 
