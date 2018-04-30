@@ -84,10 +84,10 @@ The CESTM building also houses the National Weather Service, which releases radi
 
 The measurements are modeled as switching between noise and valid measurement states, which are described by distinct data generating processes. Due to local homogeneity of the atmosphere each measurement provides information about the state of neighboring measurements which we encode as a space- and time-switching markov random field. Local homogeneity of the atmosphere also creates a pattern of spatially and temporally autocorrelated error terms in the radial wind speed measurements.
 
-We use a 2-dimensional median filter to estimate the spatially and temporally autocorrelated error terms and subtract that from the raw radial wind speed values, leaving us with an estimate of the residual error. The residuals can then be modeled as a Gaussian variance-switching process without autocorrelated errors, which allows us to solve the model with existing methods.
+We use a 2-dimensional median filter to estimate the spatially and temporally autocorrelated error terms and subtract that from the raw radial wind speed values, leaving us with an estimate of the residual error. The residuals can then be modeled as a Gaussian variance-switching process without autocorrelated errors, which allows us to solve the model with existing methods. Figure \@ref(fig:filters) shows the RWS and CNR values before and after filtering.
 
 
-```{python, fig.cap='RWS data and results', fig.align='center', fig.width=3.17}
+```{python}
 # add the current folder to the import path
 import sys
 sys.path.append('.')
@@ -97,44 +97,68 @@ import numpy as np
 warnings.simplefilter("ignore")
 import xarray as xr
 import rasppy
-from scipy.ndimage import median_filter
+from scipy.ndimage import median_filter, gaussian_filter
 
-# read data
+# get lidar data for LOS==0
 lidar = xr.open_dataset('cestm_roof80_20171003.nc')
+lidar0 = lidar.rasp.los_format().sel(LOS=0)
+lidar0.swap_dims({'scan': 'Time'})
+
 # apply filters
-lidar2_0 = lidar.rasp.los_format().sel(LOS=0)
-lidar2_0.swap_dims({'scan': 'Time'})
-lidar2_0['filtered_RWS'] = (lidar2_0['RWS'].dims, median_filter(lidar2_0['RWS'], size=(7, 59)))
-a1 = xr.concat([lidar2_0['RWS'],
-                lidar2_0['RWS'].where(lidar2_0['Status']),
-                lidar2_0['filtered_RWS'],
-                lidar2_0['RWS'].where(lidar2_0['status2'] > .5)], dim='Data')
-a1.coords['Data'] = ['Unfiltered RWS', 'CNR Threshold Wind', 'Median', 'HMRF Wind']
+lidar0['filtered_RWS'] = (lidar0['RWS'].dims, median_filter(lidar0['RWS'], size=(7, 59)))
+lidar0['filtered_CNR'] = (lidar0['CNR'].dims, gaussian_filter(lidar0['CNR'], sigma=(1, 2)))
+
 # organize for R
-rws = lidar2_0['RWS'].values
-times = lidar2_0.coords['Time'].values
-ranges = lidar2_0.coords['Range'].values
+rws = lidar0['RWS'].values
+frws = lidar0['filtered_RWS'].values
+cnr = lidar0['CNR'].values
+fcnr = lidar0['filtered_CNR'].values
+times = lidar0.coords['Time'].values
+ranges = lidar0.coords['Range'].values
 ```
 
-```{r filters, fig.cap='Raw and filtered CNR and RWS values for October 3rd, 2017', fig.width=3.17}
+```{r filters, message=FALSE, fig.cap='Raw and filtered CNR and RWS values for October 3rd, 2017. a) Raw RWS values. b) Filtered RWS values. c) Raw CNR values. d) Filtered CNR values.', fig.subcap=c('', ''), fig.env="figure*", fig.width=3.17, fig.height=2, fig.ncol=2}
 library(reshape2)
 library(ggplot2)
 library(scales)
+library(viridis)
 
 # get the data from python
 rws_df = melt(py$rws)
 rws_df$Range = py$ranges[rws_df$Var1]
 rws_df$Time = py$times[rws_df$Var2]
-# ggplot(rws_df, aes(x=Time, y=Range, fill=value, color=value)) + geom_raster() +
-#   # scale_x_continuous(expand = c(0, 0)) +
-#   scale_y_continuous(expand = c(0, 0)) +
-#   scale_fill_gradient2(low=muted("blue"), high=muted("red")) +
-#   scale_color_gradient2(low=muted("blue"), high=muted("red"))
 ggplot(rws_df, aes(x=Time, y=Range, fill=value, color=value)) + geom_tile() +
-  scale_x_datetime(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0)) +
-  scale_fill_gradient2(low=muted("blue"), high=muted("red")) +
-  scale_color_gradient2(low=muted("blue"), high=muted("red"))
+  scale_x_datetime('Hour [UTC]', date_labels='%H', expand = c(0, 0)) +
+  scale_y_continuous('Range [m]', expand = c(0, 0)) +
+  scale_fill_gradient2('RWS [m/s]', low=muted("blue"), high=muted("red"), limits = c(-5,5), oob=squish) +
+  scale_color_gradient2('RWS [m/s]', low=muted("blue"), high=muted("red"), limits = c(-5,5), oob=squish)
+
+frws_df = melt(py$frws)
+frws_df$Range = py$ranges[frws_df$Var1]
+frws_df$Time = py$times[frws_df$Var2]
+ggplot(frws_df, aes(x=Time, y=Range, fill=value, color=value)) + geom_tile() +
+  scale_x_datetime('Hour [UTC]', date_labels='%H', expand = c(0, 0)) +
+  scale_y_continuous('Range [m]', expand = c(0, 0)) +
+  scale_fill_gradient2('RWS [m/s]', low=muted("blue"), high=muted("red"), limits = c(-5,5), oob=squish) +
+  scale_color_gradient2('RWS [m/s]', low=muted("blue"), high=muted("red"), limits = c(-5,5), oob=squish)
+
+cnr_df = melt(py$cnr)
+cnr_df$Range = py$ranges[cnr_df$Var1]
+cnr_df$Time = py$times[cnr_df$Var2]
+ggplot(cnr_df, aes(x=Time, y=Range, fill=value, color=value)) + geom_tile() +
+  scale_x_datetime('Hour [UTC]', date_labels='%H', expand = c(0, 0)) +
+  scale_y_continuous('Range [m]', expand = c(0, 0)) +
+  scale_fill_viridis('CNR [dB]', limits=c(-35, -10), oob=squish) +
+  scale_color_viridis('CNR [dB]', limits=c(-35, -10), oob=squish)
+
+fcnr_df = melt(py$fcnr)
+fcnr_df$Range = py$ranges[fcnr_df$Var1]
+fcnr_df$Time = py$times[fcnr_df$Var2]
+ggplot(fcnr_df, aes(x=Time, y=Range, fill=value, color=value)) + geom_tile() +
+  scale_x_datetime('Hour [UTC]', date_labels='%H', expand = c(0, 0)) +
+  scale_y_continuous('Range [m]', expand = c(0, 0)) +
+  scale_fill_viridis('CNR [dB]', limits=c(-35, -10), oob=squish) +
+  scale_color_viridis('CNR [dB]', limits=c(-35, -10), oob=squish)
 ```
 
 
@@ -146,7 +170,7 @@ We plot Pearson correlation coefficients in figure \@ref(fig:corr). Our results 
 
 The hidden markov random field wind correlations are similar, with the exception that the sharp dips in correlations (that we hypothesize are due to valid measurements interspersed with noise) do not appear. The results suggest that data filtered with the hidden markov random field is comparable in quality to data filtered with the CNR threshold method when only small amounts of noise are present.
 
-```{r corr, fig.cap='Pearson correlation of lidar horizontal wind speeds and radiosonde wind speeds at different heights.', fig.width=3.17}
+```{r corr, fig.cap='Pearson correlation of lidar horizontal wind speeds and radiosonde wind speeds at different heights.', fig.width=3.17, fig.height=2.5}
 library(reshape2)
 library(ggplot2)
 
@@ -159,7 +183,7 @@ lcorr = melt(corr_df, id.vars='Range', variable.name='Method',
              value.name='Correlation Coefficient')
 names(lcorr)[1] = 'Range [m]'
 ggplot(lcorr, aes(x=`Range [m]`, y=`Correlation Coefficient`, color=Method)) +
-  geom_line() + theme(legend.position="bottom")
+  geom_line() + scale_color_discrete('Method:') + theme(legend.position="bottom")
 ```
 
 
