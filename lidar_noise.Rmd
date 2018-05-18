@@ -26,6 +26,9 @@ output:
     base_format: rticles::ams_article
 header-includes:
   - \usepackage{subfig}
+  - \usepackage{booktabs}
+  - \DeclareMathOperator{\median}{median}
+  - \DeclareMathOperator{\filter}{filter}
 ---
 
 ```{r setup, echo=TRUE, include=FALSE}
@@ -67,10 +70,53 @@ We apply this method to data collected by Leosphere lidars used by the Universit
 
 ## Markov Random Fields
 
-Markov random fields are commonly used to model image segmentation problems [@li_markov_2009]. Pixels are represented as nodes in a regular network structure. Each node ___ a hidden label.
-Transition probabilities from a node to a neighboring node are constant throughout the network, satisfying Markov properties.
+Markov random fields are commonly used to model image segmentation problems [@li_markov_2009]. The models represent pixels as nodes in a regular network structure. Figure \@ref(fig:networks) shows two common network structures. Each node contains a hidden label which corresponds to an object in an image. Label transition probabilities from a node to a neighboring node are constant throughout the network, thus satisfying Markov properties.
 
-Because our data has both a space (Range) and time dimension, we model the data noise state as a markov random field, which is an n-dimensional generalization of a 1-dimensional markov chain. Markov random fields are commonly used in image processing to segment images, i.e. classify pixels.
+```{r networks, message=FALSE, fig.cap='Standard Markov random field structures. a) Order 1. b) Order 2.', fig.subcap=c('', ''), fig.env="figure*", fig.width=3.17, fig.height=2, fig.ncol=2}
+library(igraph)
+
+## the grid of nodes
+nodes = matrix(1:100, nrow=10, ncol=10)
+
+make_edges = function(nodes, x_offset, y_offset) {
+  if (x_offset >= 0) {
+    start_nodes = nodes[1:(nrow(nodes) - y_offset),
+                        1:(nrow(nodes) - x_offset)]
+    end_nodes = nodes[(y_offset + 1):nrow(nodes),
+                      (x_offset + 1):nrow(nodes)]
+  } else {
+    start_nodes = nodes[1:(nrow(nodes) - y_offset),
+                        (1 - x_offset):nrow(nodes)]
+    end_nodes = nodes[(y_offset + 1):nrow(nodes),
+                      1:(nrow(nodes) + x_offset)]
+  }
+  cbind(as.vector(start_nodes), as.vector(end_nodes))
+}
+
+
+edges_o1 = rbind(make_edges(nodes, 1, 0),
+                 make_edges(nodes, 0, 1))
+edges_o2 = rbind(make_edges(nodes, 1, 0),
+                 make_edges(nodes, 0, 1),
+                 make_edges(nodes, 1, 1),
+                 make_edges(nodes, -1, 1))
+go1 = graph_from_edgelist(edges_o1, directed=F)
+go2 = graph_from_edgelist(edges_o2, directed=F)
+
+grid_layout = layout_on_grid(go1, width = 10, height = 10)
+
+par(mar=rep(0, 4))
+plot(go1, layout=grid_layout,
+     rescale=FALSE, xlim=c(3.5, 7.5), ylim=c(3.5, 7.5),
+     vertex.size=30, vertex.color='gray', vertex.label=NA)
+
+par(mar=rep(0, 4))
+plot(go2, layout=grid_layout,
+     rescale=FALSE, xlim=c(3.5, 7.5), ylim=c(3.5, 7.5),
+     vertex.size=30, vertex.color='gray', vertex.label=NA)
+```
+
+Observed pixel values are drawn from label-dependent random distributions. The probability of a label for a given pixel can be calculated as a function of the pixel's values and the label probabilities of neighboring nodes.
 
 For example, neuroimaging researchers use markov random fields to identify brain regions in MRI data, modeling each region as a distinct data generating process with values drawn from a Gaussian distribution. The markov random field incorporates spatial relationships between the voxels to produce more coherent classifications.
 
@@ -91,7 +137,11 @@ The CESTM building also houses the National Weather Service, which releases radi
 
 # Methodology
 
+Because our data has both a space (Range) and time dimension, we model the data noise state as a markov random field
+
 The measurements are modeled as switching between noise and valid measurement states, which are described by distinct data generating processes. Due to local homogeneity of the atmosphere each measurement provides information about the state of neighboring measurements which we encode as a space- and time-switching markov random field. Local homogeneity of the atmosphere also creates a pattern of spatially and temporally autocorrelated error terms in the radial wind speed measurements.
+
+Table \@ref(tab:distributions) shows the distributions assigned to CNR and RWS values in each state.
 
 We use a 2-dimensional median filter to estimate the spatially and temporally autocorrelated error terms and subtract that from the raw radial wind speed values, leaving us with an estimate of the residual error. The residuals can then be modeled as a Gaussian variance-switching process without autocorrelated errors, which allows us to solve the model with existing methods. Figure \@ref(fig:filters) shows the RWS and CNR values before and after filtering.
 
@@ -168,6 +218,17 @@ ggplot(fcnr_df, aes(x=Time, y=Range, fill=value, color=value)) + geom_tile() +
   scale_y_continuous('Range [m]', expand = c(0, 0)) +
   scale_fill_viridis('CNR [dB]', limits=c(-35, -10), oob=squish) +
   scale_color_viridis('CNR [dB]', limits=c(-35, -10), oob=squish)
+```
+
+
+```{r distributions}
+text_tbl = data.frame(RWS=c('$N(\\median_i, \\sigma^2)$', 
+                            '$U(rws_{min}, rws_{max})$'),
+                      CNR=c('$N(\\filter_i, \\sigma^2)$',
+                            '$N(\\mu_{noise}, \\sigma^2_{noise})$'),
+                      row.names=c('Wind', 'Noise'))
+knitr::kable(text_tbl, booktabs=T, escape = F,
+  caption = 'RWS and CNR distributions in different states.')
 ```
 
 
