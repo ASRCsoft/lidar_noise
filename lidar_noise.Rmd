@@ -67,6 +67,9 @@ We apply this method to data collected by Leosphere lidars used by the Universit
 
 ## Markov Random Fields
 
+Markov random fields are commonly used to model image segmentation problems [@li_markov_2009]. Pixels are represented as nodes in a regular network structure. Each node ___ a hidden label.
+Transition probabilities from a node to a neighboring node are constant throughout the network, satisfying Markov properties.
+
 Because our data has both a space (Range) and time dimension, we model the data noise state as a markov random field, which is an n-dimensional generalization of a 1-dimensional markov chain. Markov random fields are commonly used in image processing to segment images, i.e. classify pixels.
 
 For example, neuroimaging researchers use markov random fields to identify brain regions in MRI data, modeling each region as a distinct data generating process with values drawn from a Gaussian distribution. The markov random field incorporates spatial relationships between the voxels to produce more coherent classifications.
