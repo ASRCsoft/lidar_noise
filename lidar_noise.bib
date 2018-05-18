@@ -1,98 +1,316 @@
-%%
-% JOURNAL ABBREVIATIONS
-%
-@STRING{AMS 	= "Amer.\ Meteor.\ Soc."}
-@STRING{AGU 	= "Amer.\ Geophys.\ Union"}
-@STRING{AIP 	= "Amer. Inst. Phys."}
-@STRING{ADGEO     = "Adv.\ Geosci."}
-@STRING{AFM       = "Agric.\ For.\ Meteor."}
-@STRING{AM        = "Ann.\ Meteor."}
-@STRING{AN        = "Astrophys.\ Norv."}		% Astrophysica Norvegica
-@STRING{AO        = "Atmos.--Ocean"}			% Atmosphere--Ocean, published by Canadian Meteorological Society (CMOS)
-@STRING{AR        = "Atmos.\ Res."}			% Atmospheric Research
-@STRING{ARFM      = "Annu.\ Rev.\ Fluid Mech."}
-@STRING{AUMET     = "Aust.\ Meteor.\ Mag."}
-@STRING{BAMS      = "Bull.\ Amer.\ Meteor.\ Soc."}
-@STRING{CAP       = "Contrib.\ Atmos.\ Phys."}
-@STRING{CC        = "Climate Change"}      % Climate Change 
-@STRING{CCH       = "Climatic Change"}			% Climatic Change
-@STRING{CDYN      = "Climate Dyn."}
-@STRING{CHAOS     = "Chaos"}
-@STRING{COL       = "Collier's"}
-@STRING{CRS       = "Cont.\ Shelf Res."}
-@STRING{DAO       = "Dyn.\ Atmos.\ Oceans"}
-@STRING{ECO       = "Ecology"}
-@STRING{EI        = "Earth Interact."}
-@STRING{GA        = "Geophysica"}			% Geophysica, published by Geophysical Society of Finland 
-@STRING{GEOMAG    = "Geophys.\ Mag."}
-@STRING{GN        = "Geophys.\ Norv."}			% Geophysica Norvegica
-@STRING{GRL       = "Geophys.\ Res.\ Lett."}
-@STRING{GEOINT    = "Geofis.\ Int."}			% Geofisica Internacional (Mexican journal -- vols. 3--5 contained proceedings from a hurricane conference
-@STRING{GEOPUB    = "Geofys.\ Publ."}
-@STRING{GPC       = "Global Planet.\ Change"}
-@STRING{HP        = "Health Phys."}
-@STRING{IAOP      = "Izv.\ Atmos.\ Ocean.\ Phys.\ (Engl.\ Transl.)"}
-@STRING{IJC       = "Int.\ J.\ Climatol."}
-@STRING{JAM       = "J.\ Appl.\ Meteor."}		% renamed to name below in 2006
-@STRING{JAMC      = "J.\ Appl.\ Meteor.\ Climatol."}  	% Journal of Applied Meteorology and Climatology (this journal used to be called the Journal of Applied Meteorology before 2006)
-@STRING{JAS       = "J.\ Atmos.\ Sci."}
-@STRING{JAOT      = "J.\ Atmos.\ Oceanic Technol."}
-@STRING{JCAM      = "J.\ Climate Appl.\ Meteor."}	% from 1983--87, now JAMC
-@STRING{JCLI      = "J.\ Climate"}
-@STRING{JCR       = "J.\ Coastal Res."}
-@STRING{JFM       = "J.\ Fluid\ Mech."}
-@STRING{JEM       = "J.\ Eng.\ Math."}			% Journal of Engineering Mathematics
-@STRING{JGR       = "J.\ Geophys.\ Res."}
-@STRING{JHM       = "J.\ Hydrometeor."}
-@STRING{JMS       = "J.\ Mar.\ Syst."}
-@STRING{JM        = "J.\ Meteor."}
-@STRING{JMR       = "J.\ Mar.\ Res."}
-@STRING{JMSJ      = "J.\ Meteor.\ Soc.\ Japan"}
-@STRING{JPO       = "J.\ Phys.\ Oceanogr."}
-@STRING{JOCEAN    = "J.\ Oceanogr."}			% Journal of Oceanography
-@STRING{JOSJ      = "J.\ Oceanogr.\ Soc.\ Japan"}
-@STRING{JSE       = "J.\ Struct.\ Eng."}	% Journal of Structural Engineering at ASCE
-@STRING{JTM       = "J.\ Tropical Meteor."}
-@STRING{JWEIA     = "J.\ Wind Eng.\ Ind.\ Aerodyn."}
-@STRING{MA        = "Meteor.\ Appl."}
-@STRING{MAP       = "Meteor.\ Atmos.\ Phys."}
-@STRING{METMON    = "Meteor.\ Monogr."}
-@STRING{METZEIT   = "Meteor.\ Z."}
-@STRING{MWL       = "Mar.\ Wea.\ Log"}
-@STRING{MWR       = "Mon.\ Wea.\ Rev."}
-@STRING{NAT       = "Nature"}
-@STRING{NHR       = "Nat.\ Hazards Rev."}
-@STRING{NWD       = "Natl.\ Weather Dig."}
-@STRING{OA        = "Oceanol. Aeta"}
-@STRING{OCEAN     = "Oceanography"}                	% a quarterly journal of The Oceanography Society
-@STRING{PAG       = "Pure Appl.\ Geophys."}
-@STRING{PF        = "Phys.\ Fluids"}
-@STRING{PHYSD     = "Physica D"}
-@STRING{PMG       = "Pap.\ Meteor.\ Geophys."}	% Papers in Meteorology and Geophysics
-@STRING{PNAS      = "Proc.\ Natl.\ Acad.\ Sci.\ (USA)"}
-@STRING{PRE       = "Phys.\ Rev.\ E"}
-@STRING{PRSA      = "Proc.\ Roy.\ Soc."}
-@STRING{PT        = "Phys.\ Today"}
-@STRING{PTRS      = "Philos.\ Trans.\ Roy.\ Soc.\ London"}
-@STRING{QJRMS     = "Quart.\ J.\ Roy.\ Meteor.\ Soc."}
-@STRING{RGEO      = "Rev. Geophys."}
-@STRING{SCI       = "Science"}
-@STRING{SOLA      = "SOLA"}				% Scientific Online Letters on the Atmosphere
-@STRING{TAGU      = "Eos, Trans.\ Amer.\ Geophys.\ Union"}
-@STRING{TELLUS    = "Tellus"}
-@STRING{TCFD      = "Theor.\ Comput.\ Fluid Dyn."}
-@STRING{WEA       = "Weather"}
-@STRING{WW        = "Weatherwise"}
-@STRING{WF        = "Wea.\ Forecasting"}
-@STRING{WMOB      = "WMO Bull."}
 
-% my stuff
-@ARTICLE{kumera,
-	AUTHOR = {Kumera, Valerie-M. and Reudera, Joachim and Furevika, Birgitte R.},
-	YEAR = {2014},
-	TITLE = {A comparison of LiDAR and radiosonde wind measurements},
-	JOURNAL = {Energy Procedia},
-	VOLUME = {53},
-	PAGES = {214-220},
-	DOI = {10.1016/j.egypro.2014.07.230}
+@article{kumer_comparison_2014,
+	series = {{EERA} {DeepWind}' 2014, 11th {Deep} {Sea} {Offshore} {Wind} {R}\&{D} {Conference}},
+	title = {A {Comparison} of {LiDAR} and {Radiosonde} {Wind} {Measurements}},
+	volume = {53},
+	issn = {1876-6102},
+	url = {http://www.sciencedirect.com/science/article/pii/S1876610214011072},
+	doi = {10.1016/j.egypro.2014.07.230},
+	abstract = {Doppler LiDAR measurements are already well established in the wind energy research and their accuracy has been tested against met mast data up to 100 m above ground. However, the new generation of scanning LiDAR have a much higher range and thus it is not possible to verify measurements at higher altitudes. Therefore, the LiDAR Measurement Campaign Sola (LIMECS) was conducted at the airport of Stavanger from March to August 2013 to compare LiDAR and radiosonde winds. It was a collaborative test campaign between the University of Bergen, the Norwegian Meteorological Office (MET), Christian Michelsen Research (CMR) and Avinor. With the airports’ location at the Norwegian West Coast, additional motivations were the investigations in characteristics of coastal winds, as well as the validation of the LES turbulence forecast for the airport of Stavanger. We deployed two Windcubes v1 and a scanning Windcube 100S at two different sites in Sola, one next to the runway and the other one near to the autosonde from MET. The Windcube 100S scans several cross-sections of the ambient flow on hourly basis. In combination with wind profiles up to 200 m (Windcubes v1) and 3km (Windcube 100S) and temporally more frequent radiosonde ascents, we collect a variety of wind information in the coastal atmospheric boundary layer. First results show increasing correlation of 0.95 to 0.99 for increasing measurement heights (125 to 1325 m) between the scanning LiDAR wind profiles and the radiosonde horizontal wind speeds. Though the number of LiDAR measurements decreases with increasing height, the measurements seem to correlate better with the radiosonde data in high altitudes.},
+	urldate = {2018-05-16},
+	journal = {Energy Procedia},
+	author = {Kumer, Valerie-M. and Reuder, Joachim and Furevik, Birgitte R.},
+	month = jan,
+	year = {2014},
+	keywords = {LiDAR, planetary boundary layer, rawinsonde},
+	pages = {214--220},
+	file = {ScienceDirect Full Text PDF:/home/will/Zotero/storage/5ZYBYEZB/Kumer et al. - 2014 - A Comparison of LiDAR and Radiosonde Wind Measurem.pdf:application/pdf;ScienceDirect Snapshot:/home/will/Zotero/storage/4DVQP48M/S1876610214011072.html:text/html}
+}
+
+@article{manninen_generalised_2016,
+	title = {A generalised background correction algorithm for a {Halo} {Doppler} lidar and its application to data from {Finland}},
+	volume = {9},
+	issn = {1867-8548},
+	url = {https://www.atmos-meas-tech.net/9/817/2016/},
+	doi = {10.5194/amt-9-817-2016},
+	abstract = {Current commercially available Doppler lidars provide an economical and robust solution for measuring vertical and horizontal wind velocities, together with the ability to provide co- and cross-polarised backscatter profiles. The high temporal resolution of these instruments allows turbulent properties to be obtained from studying the variation in radial velocities. However, the instrument specifications mean that certain characteristics, especially the background noise behaviour, become a limiting factor for the instrument sensitivity in regions where the aerosol load is low. Turbulent calculations require an accurate estimate of the contribution from velocity uncertainty estimates, which are directly related to the signal-to-noise ratio. Any bias in the signal-to-noise ratio will propagate through as a bias in turbulent properties. In this paper we present a method to correct for artefacts in the background noise behaviour of commercially available Doppler lidars and reduce the signal-to-noise ratio threshold used to discriminate between noise, and cloud or aerosol signals. We show that, for Doppler lidars operating continuously at a number of locations in Finland, the data availability can be increased by as much as 50 \% after performing this background correction and subsequent reduction in the threshold. The reduction in bias also greatly improves subsequent calculations of turbulent properties in weak signal regimes.},
+	number = {2},
+	urldate = {2018-05-16},
+	journal = {Atmos. Meas. Tech.},
+	author = {Manninen, A. J. and O'Connor, E. J. and Vakkari, V. and Petäjä, T.},
+	month = mar,
+	year = {2016},
+	keywords = {LiDAR},
+	pages = {817--827},
+	file = {Atmos. Meas. Tech. PDF:/home/will/Zotero/storage/GRQZRL4R/Manninen et al. - 2016 - A generalised background correction algorithm for .pdf:application/pdf}
+}
+
+@article{besag_statistical_1986,
+	title = {On the {Statistical} {Analysis} of {Dirty} {Pictures}},
+	volume = {48},
+	issn = {0035-9246},
+	url = {http://www.jstor.org/stable/2345426},
+	abstract = {A continuous two-dimensional region is partitioned into a fine rectangular array of sites or "pixels", each pixel having a particular "colour" belonging to a prescribed finite set. The true colouring of the region is unknown but, associated with each pixel, there is a possibly multivariate record which conveys imperfect information about its colour according to a known statistical model. The aim is to reconstruct the true scene, with the additional knowledge that pixels close together tend to have the same or similar colours. In this paper, it is assumed that the local characteristics of the true scene can be represented by a non-degenerate Markov random field. Such information can be combined with the records by Bayes' theorem and the true scene can be estimated according to standard criteria. However, the computational burden is enormous and the reconstruction may reflect undesirable large-scale properties of the random field. Thus, a simple, iterative method of reconstruction is proposed, which does not depend on these large-scale characteristics. The method is illustrated by computer simulations in which the original scene is not directly related to the assumed random field. Some complications, including parameter estimation, are discussed. Potential applications are mentioned briefly.},
+	number = {3},
+	urldate = {2018-05-16},
+	journal = {Journal of the Royal Statistical Society. Series B (Methodological)},
+	author = {Besag, Julian},
+	year = {1986},
+	keywords = {Markov random fields},
+	pages = {259--302},
+	file = {Besag - 1986 - On the Statistical Analysis of Dirty Pictures.pdf:/home/will/Zotero/storage/JZB6KYV7/Besag - 1986 - On the Statistical Analysis of Dirty Pictures.pdf:application/pdf}
+}
+
+@article{besag_statistical_1993,
+	title = {Statistical analysis of dirty pictures*},
+	volume = {20},
+	issn = {0266-4763},
+	url = {https://doi.org/10.1080/02664769300000059},
+	doi = {10.1080/02664769300000059},
+	abstract = {A continuous two-dimensional region is partitioned into a fine rectangular array of sites, or ‘pixels', each pixel having a particular '‘colour’ belonging to a prescribed finite set. The true colouring of the region is unknown but, associated with each pixel, there is a possibly multivariate record which conveys imperfect information about its colour according to a known statistical model. The aim is to reconstruct the true scene, with the additional knowledge that pixels close together tend to have the same or similar colours. In this paper, it is assumed that the local characteristics of the true scene can be represented by a non-degenerate Markov random field. Such information can be combined with the records by Bayes' theorem and the true scene can be estimated according to standard criteria. However, the computational burden is enormous and the reconstruction may reflect undesirable large-scale properties of the random field. Thus, a simple, iterative method of reconstruction is proposed, which does not depend on these large-scale characteristics. The method is illustrated by computer simulations in which the original scene is not directly related to the assumed random field. Some complications, including parameter estimation, are discussed. Potential applications are mentioned briefly.},
+	number = {5-6},
+	urldate = {2018-05-16},
+	journal = {Journal of Applied Statistics},
+	author = {Besag, Julian},
+	month = jan,
+	year = {1993},
+	keywords = {Markov random fields},
+	pages = {63--87},
+	file = {Snapshot:/home/will/Zotero/storage/XJVT2AJK/02664769300000059.html:text/html}
+}
+
+@article{geman_stochastic_1984,
+	title = {Stochastic {Relaxation}, {Gibbs} {Distributions}, and the {Bayesian} {Restoration} of {Images}},
+	volume = {PAMI-6},
+	issn = {0162-8828},
+	doi = {10.1109/TPAMI.1984.4767596},
+	abstract = {We make an analogy between images and statistical mechanics systems. Pixel gray levels and the presence and orientation of edges are viewed as states of atoms or molecules in a lattice-like physical system. The assignment of an energy function in the physical system determines its Gibbs distribution. Because of the Gibbs distribution, Markov random field (MRF) equivalence, this assignment also determines an MRF image model. The energy function is a more convenient and natural mechanism for embodying picture attributes than are the local characteristics of the MRF. For a range of degradation mechanisms, including blurring, nonlinear deformations, and multiplicative or additive noise, the posterior distribution is an MRF with a structure akin to the image model. By the analogy, the posterior distribution defines another (imaginary) physical system. Gradual temperature reduction in the physical system isolates low energy states (“annealing”), or what is the same thing, the most probable states under the Gibbs distribution. The analogous operation under the posterior distribution yields the maximum a posteriori (MAP) estimate of the image given the degraded observations. The result is a highly parallel “relaxation” algorithm for MAP estimation. We establish convergence properties of the algorithm and we experiment with some simple pictures, for which good restorations are obtained at low signal-to-noise ratios.},
+	number = {6},
+	journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+	author = {Geman, S. and Geman, D.},
+	month = nov,
+	year = {1984},
+	keywords = {Additive noise, Annealing, Bayesian methods, Deformable models, Degradation, Energy states, Gibbs distribution, image restoration, Image restoration, line process, MAP estimate, Markov random field, Markov random fields, relaxation, scene modeling, spatial degradation, Stochastic processes, Temperature distribution},
+	pages = {721--741},
+	file = {IEEE Xplore Abstract Record:/home/will/Zotero/storage/BUWZK8HF/4767596.html:text/html;IEEE Xplore Full Text PDF:/home/will/Zotero/storage/MCGPRMEJ/Geman and Geman - 1984 - Stochastic Relaxation, Gibbs Distributions, and th.pdf:application/pdf}
+}
+
+@article{mao_texture_1992,
+	title = {Texture classification and segmentation using multiresolution simultaneous autoregressive models},
+	volume = {25},
+	issn = {0031-3203},
+	url = {http://www.sciencedirect.com/science/article/pii/0031320392900995},
+	doi = {10.1016/0031-3203(92)90099-5},
+	abstract = {We present a multiresolution simultaneous autoregressive (MR-SAR) model for texture classification and segmentation. First, a multivariate rotation-invariant SAR (RISAR) model is introduced which is based on the circular autoregressive (CAR) model. Experiments show that the multivariate RISAR model outperforms the CAR model in texture classification. Then, we demonstrate that integrating the information extracted from multiresolution SAR models gives much better performance than single resolution methods in both texture classification and texture segmentation. A quality measure to evaluate individual features for the purpose of segmentation is also presented. We employ the spatial coordinates of the pixels as two additional features to remove small speckles in the segmented image, and carefully examine the role that the spatial features play in texture segmentation. Two internal indices are introduced to evaluate the unsupervised segmentation and to find the “true” number of segments or clusters existing in the textured image.},
+	number = {2},
+	urldate = {2018-05-16},
+	journal = {Pattern Recognition},
+	author = {Mao, Jianchang and Jain, Anil K.},
+	month = feb,
+	year = {1992},
+	keywords = {Markov random fields, Clustering, Multiresolution, Rotation-invariance, Segmentation, Simultaneous Autoregressive Model, Texture classification},
+	pages = {173--188},
+	file = {Mao and Jain - 1992 - Texture classification and segmentation using mult.pdf:/home/will/Zotero/storage/9M63PEZK/Mao and Jain - 1992 - Texture classification and segmentation using mult.pdf:application/pdf;ScienceDirect Snapshot:/home/will/Zotero/storage/DX2NAS3R/0031320392900995.html:text/html}
+}
+
+@article{stoehr_review_2017,
+	title = {A review on statistical inference methods for discrete {Markov} random fields},
+	url = {http://arxiv.org/abs/1704.03331},
+	abstract = {Developing satisfactory methodology for the analysis of Markov random field is a very challenging task. Indeed, due to the Markovian dependence structure, the normalizing constant of the fields cannot be computed using standard analytical or numerical methods. This forms a central issue for any statistical approach as the likelihood is an integral part of the procedure. Furthermore, such unobserved fields cannot be integrated out and the likelihood evaluation becomes a doubly intractable problem. This report gives an overview of some of the methods used in the literature to analyse such observed or unobserved random fields.},
+	urldate = {2018-05-16},
+	journal = {arXiv:1704.03331 [stat]},
+	author = {Stoehr, Julien},
+	month = apr,
+	year = {2017},
+	note = {arXiv: 1704.03331},
+	keywords = {Markov random fields, Statistics - Methodology},
+	file = {arXiv\:1704.03331 PDF:/home/will/Zotero/storage/6M7VNNZG/Stoehr - 2017 - A review on statistical inference methods for disc.pdf:application/pdf;arXiv.org Snapshot:/home/will/Zotero/storage/VJ3BZGZZ/1704.html:text/html}
+}
+
+@article{a._bouman_markov_2018,
+	title = {Markov {Random} {Fields} and {Stochastic} {Image} {Models}},
+	abstract = {] C. Therrien, T. Quatieri, and D. Dudgeon. Statistical model-based algorithm for imageanalysis. Proc. of the IEEE, 74(4):532--551, April 1986.[158] C. W. Therrien, editor. Decision Estimation and Classification: An Introduction toPattern Recognition and Related Topics. John Wiley \& Sons, New York, 1989.[159] A. Thompson, J. Kay, and D. Titterington. A cautionary note about the cross validatorychoice. J. statist. Comput. Simul., 33:199--216, 1989.[160] A. M. Thompson, J. C. Brown, J. W....},
+	author = {A. Bouman, Charles and Sauer, Ken and Saquib, Suhail},
+	month = may,
+	year = {2018},
+	keywords = {Markov random fields},
+	file = {A. Bouman et al. - 2018 - Markov Random Fields and Stochastic Image Models.pdf:/home/will/Zotero/storage/RGDTGZG9/A. Bouman et al. - 2018 - Markov Random Fields and Stochastic Image Models.pdf:application/pdf}
+}
+
+@article{roche_convergence_2011,
+	title = {On the convergence of {EM}-like algorithms for image segmentation using {Markov} random fields},
+	volume = {15},
+	issn = {1361-8423},
+	doi = {10.1016/j.media.2011.05.002},
+	abstract = {Inference of Markov random field images segmentation models is usually performed using iterative methods which adapt the well-known expectation-maximization (EM) algorithm for independent mixture models. However, some of these adaptations are ad hoc and may turn out numerically unstable. In this paper, we review three EM-like variants for Markov random field segmentation and compare their convergence properties both at the theoretical and practical levels. We specifically advocate a numerical scheme involving asynchronous voxel updating, for which general convergence results can be established. Our experiments on brain tissue classification in magnetic resonance images provide evidence that this algorithm may achieve significantly faster convergence than its competitors while yielding at least as good segmentation results.},
+	language = {eng},
+	number = {6},
+	journal = {Med Image Anal},
+	author = {Roche, Alexis and Ribes, Delphine and Bach-Cuadra, Meritxell and Krüger, Gunnar},
+	month = dec,
+	year = {2011},
+	pmid = {21621449},
+	keywords = {Markov random fields, Algorithms, Computational Biology, Computer Simulation, Humans, Markov Chains},
+	pages = {830--839},
+	file = {Roche et al. - 2011 - On the convergence of EM-like algorithms for image.pdf:/home/will/Zotero/storage/FV743DGW/Roche et al. - 2011 - On the convergence of EM-like algorithms for image.pdf:application/pdf}
+}
+
+@book{li_markov_2009,
+	edition = {3rd},
+	title = {Markov {Random} {Field} {Modeling} in {Image} {Analysis}},
+	isbn = {978-1-84800-278-4},
+	abstract = {Markov random field (MRF) theory provides a basis for modeling contextual constraints in visual processing and interpretation. It enables systematic development of optimal vision algorithms when used with optimization principles. This detailed and thoroughly enhanced third edition presents a comprehensive study / reference to theories, methodologies and recent developments in solving computer vision problems based on MRFs, statistics and optimisation. It treats various problems in low- and high-level computational vision in a systematic and unified way within the MAP-MRF framework. Among the main issues covered are: how to use MRFs to encode contextual constraints that are indispensable to image understanding; how to derive the objective function for the optimal solution to a problem; and how to design computational algorithms for finding an optimal solution. Easy-to-follow and coherent, the revised edition is accessible, includes the most recent advances, and has new and expanded sections on such topics as: Discriminative Random Fields (DRF) Strong Random Fields (SRF) Spatial-Temporal Models Total Variation Models Learning MRF for Classification (motivation + DRF) Relation to Graphic Models Graph Cuts Belief Propagation Features: Focuses on the application of Markov random fields to computer vision problems, such as image restoration and edge detection in the low-level domain, and object matching and recognition in the high-level domain Presents various vision models in a unified framework, including image restoration and reconstruction, edge and region segmentation, texture, stereo and motion, object matching and recognition, and pose estimation Uses a variety of examples to illustrate how to convert a specific vision problem involving uncertainties and constraints into essentially an optimization problem under the MRF setting Introduces readers to the basic concepts, important models and various special classes of MRFs on the regular image lattice and MRFs on relational graphs derived from images Examines the problems of parameter estimation and function optimization Includes an extensive list of references This broad-ranging and comprehensive volume is an excellent reference for researchers working in computer vision, image processing, statistical pattern recognition and applications of MRFs. It has been class-tested and is suitable as a textbook for advanced courses relating to these areas.},
+	publisher = {Springer Publishing Company, Incorporated},
+	author = {Li, Stan Z.},
+	year = {2009},
+	file = {Li - 2009 - Markov Random Field Modeling in Image Analysis.pdf:/home/will/Zotero/storage/89SPYBVT/Li - 2009 - Markov Random Field Modeling in Image Analysis.pdf:application/pdf}
+}
+
+@article{sun_detail-preserving_1994,
+	title = {Detail-preserving median based filters in image processing},
+	volume = {15},
+	issn = {0167-8655},
+	url = {http://www.sciencedirect.com/science/article/pii/0167865594900825},
+	doi = {10.1016/0167-8655(94)90082-5},
+	abstract = {A switching scheme for median filtering which is suitable to be a prefilter before some subsequent processing e.g. edge detection or data compression is presented to remove impulse noises in digital images with small signal distortion. The switching procedure is based on the local measurements of impulses which is called impulse detection. A median and weighted median based impulse detector is devised and the relevant properties are discussed. By using a test image, we demonstrate that the filtering structure yields an output image which is significantly better than those of median, weighted median and optimal stack filters.},
+	number = {4},
+	urldate = {2018-05-16},
+	journal = {Pattern Recognition Letters},
+	author = {Sun, Tong and Neuvo, Yrjö},
+	month = apr,
+	year = {1994},
+	keywords = {Impulse noises, Median filtering, Switching scheme, Weighted median filtering},
+	pages = {341--347},
+	file = {ScienceDirect Snapshot:/home/will/Zotero/storage/YM4PF835/0167865594900825.html:text/html;Sun and Neuvo - 1994 - Detail-preserving median based filters in image pr.pdf:/home/will/Zotero/storage/VBUQYJYM/Sun and Neuvo - 1994 - Detail-preserving median based filters in image pr.pdf:application/pdf}
+}
+
+@article{kundu_application_1984,
+	title = {Application of two-dimensional generalized mean filtering for removal of impulse noises from images},
+	volume = {32},
+	issn = {0096-3518},
+	doi = {10.1109/TASSP.1984.1164364},
+	abstract = {A new method for removing impulse noises from images is proposed. The filtering scheme is based on replacing the central pixel value by the generalized mean value of all pixels inside a sliding window. The concepts of thresholding and complementation which are shown to improve the performance of the generalized mean filter are introduced. The threshold is derived using a statistical theory. The actual performance of the proposed filter is compared with that of file commonly used median filter by filtering noise corrupted real images. The hardware complexity of the two types of filters are also compared indicating the advantages of the generalized mean filter.},
+	number = {3},
+	journal = {IEEE Transactions on Acoustics, Speech, and Signal Processing},
+	author = {Kundu, A. and Mitra, S. and Vaidyanathan, P.},
+	month = jun,
+	year = {1984},
+	keywords = {Algorithm design and analysis, Cameras, Distortion, Dynamic range, Filtering algorithms, Filters, Hardware, Performance analysis, Pixel, Space technology},
+	pages = {600--609},
+	file = {IEEE Xplore Abstract Record:/home/will/Zotero/storage/PDH4PISK/1164364.html:text/html;IEEE Xplore Full Text PDF:/home/will/Zotero/storage/32NMTW8D/Kundu et al. - 1984 - Application of two-dimensional generalized mean fi.pdf:application/pdf}
+}
+
+@article{nodes_output_1984,
+	title = {The {Output} {Distribution} of {Median} {Type} {Filters}},
+	volume = {32},
+	issn = {0090-6778},
+	doi = {10.1109/TCOM.1984.1096099},
+	abstract = {The distribution of the output of the one-dimensional median filter is derived for several cases including thekth-order output distribution with any input distribution. This is then used in several illustrative examples of median filtering a signal plus white noise.},
+	number = {5},
+	journal = {IEEE Transactions on Communications},
+	author = {Nodes, T. and Gallagher, N.},
+	month = may,
+	year = {1984},
+	keywords = {Bandwidth, Filtering, Military computing, Nonlinear filters, Signal analysis, Signal processing, Smoothing methods, Spectral shape, Speech processing, White noise},
+	pages = {532--541},
+	file = {IEEE Xplore Abstract Record:/home/will/Zotero/storage/IK4KWZGN/1096099.html:text/html;IEEE Xplore Full Text PDF:/home/will/Zotero/storage/GEEBPZD4/Nodes and Gallagher - 1984 - The Output Distribution of Median Type Filters.pdf:application/pdf}
+}
+
+@article{wang_new_2009,
+	title = {A new impulse detection and filtering method for removal of wide range impulse noises},
+	volume = {42},
+	issn = {0031-3203},
+	url = {http://www.sciencedirect.com/science/article/pii/S003132030900051X},
+	doi = {10.1016/j.patcog.2009.01.022},
+	abstract = {A new impulse detection and filtering algorithm is proposed for restoration of images that are highly corrupted by impulse noise. It is based on the minimum absolute value of four convolutions obtained by one-dimensional Laplacian operators. The proposed algorithm can effectively remove the impulse noise with a wide range of noise density and produce better results in terms of the qualitative and quantitative measures of the images even at noise density as high as 90\%. Extensive simulations show that the proposed algorithm provides better performance than many of the existing switching median filters in terms of noise suppression and detail preservation.},
+	number = {9},
+	urldate = {2018-05-16},
+	journal = {Pattern Recognition},
+	author = {Wang, Shuenn-Shyang and Wu, Cheng-Hao},
+	month = sep,
+	year = {2009},
+	keywords = {Image filtering, Image processing, Impulse noise},
+	pages = {2194--2202},
+	file = {ScienceDirect Full Text PDF:/home/will/Zotero/storage/JB2API4G/Wang and Wu - 2009 - A new impulse detection and filtering method for r.pdf:application/pdf;ScienceDirect Snapshot:/home/will/Zotero/storage/ADZ8LEJW/S003132030900051X.html:text/html}
+}
+
+@article{gabbouj_overview_1992,
+	title = {An overview of median and stack filtering},
+	volume = {11},
+	issn = {0278-081X, 1531-5878},
+	url = {https://link.springer.com/article/10.1007/BF01189220},
+	doi = {10.1007/BF01189220},
+	abstract = {Within the last two decades a small group of researchers has built a useful, nontrivial theory of nonlinear signal processing around the median-related filters known as rank-order filters, order-statistic filters, weighted median filters, and stack filters. This required significant effort to overcome the bias, both in education and research, toward linear theory, which has been dominant since the days of Fourier, Laplace, and “Convolute.”We trace the development of this theory of nonlinear filtering from its beginnings in the study of noise-removal properties and structural behavior of the median filter to the recently developed theory of optimal stack filtering.The theory of stack filtering provides a point of view which unifies many different filter classes, including morphological filters, so it is discussed in detail. Of particular importance is the way this theory has brought together, in a single analytical framework, both the estimation-based and the structural-based approaches to the design of these filters.Some recent applications of median and stack filters are provided to demonstrate the effectiveness of this approach to nonlinear filtering. They include: the design of an optimal stack filter for image restoration; the use of vector median filters to attenuate impulsive noise in color images and to eliminate cross luminance and cross color in TV images; and the use of median-based filters for image sequence coding, reconstruction, and scan rate conversion in normal TV and HDTV systems.},
+	language = {en},
+	number = {1},
+	urldate = {2018-05-16},
+	journal = {Circuits Systems and Signal Process},
+	author = {Gabbouj, Moncef and Coyle, Edward J. and Gallagher, Neal C.},
+	month = mar,
+	year = {1992},
+	pages = {7--45},
+	file = {Gabbouj et al. - 1992 - An overview of median and stack filtering.pdf:/home/will/Zotero/storage/PL72WJDC/Gabbouj et al. - 1992 - An overview of median and stack filtering.pdf:application/pdf;Snapshot:/home/will/Zotero/storage/SXKFB839/BF01189220.html:text/html}
+}
+
+@article{abreu_new_1996,
+	title = {A new efficient approach for the removal of impulse noise from highly corrupted images},
+	volume = {5},
+	issn = {1057-7149},
+	doi = {10.1109/83.503916},
+	abstract = {A new framework for removing impulse noise from images is presented in which the nature of the filtering operation is conditioned on a state variable defined as the output of a classifier that operates on the differences between the input pixel and the remaining rank-ordered pixels in a sliding window. As part of this framework, several algorithms are examined, each of which is applicable to fixed and random-valued impulse noise models. First, a simple two-state approach is described in which the algorithm switches between the output of an identity filter and a rank-ordered mean (ROM) filter. The technique achieves an excellent tradeoff between noise suppression and detail preservation with little increase in computational complexity over the simple median filter. For a small additional cost in memory, this simple strategy is easily generalized into a multistate approach using weighted combinations of the identity and ROM filter in which the weighting coefficients can be optimized using image training data. Extensive simulations indicate that these methods perform significantly better in terms of noise suppression and detail preservation than a number of existing nonlinear techniques with as much as 40\% impulse noise corruption. Moreover, the method can effectively restore images corrupted with Gaussian noise and mixed Gaussian and impulse noise. Finally, the method is shown to be extremely robust with respect to the training data and the percentage of impulse noise},
+	number = {6},
+	journal = {IEEE Transactions on Image Processing},
+	author = {Abreu, E. and Lightstone, M. and Mitra, S. K. and Arakawa, K.},
+	month = jun,
+	year = {1996},
+	keywords = {image restoration, Filters, Pixel, Filtering, adaptive approach, adaptive filters, adaptive signal processing, classifier, computational complexity, Computational complexity, Computational modeling, Cost function, detail preservation, filtering operation, filtering theory, fixed valued impulse noise models, Gaussian noise, highly corrupted images, identity filter, image classification, image training data, impulse noise removal, input pixel, interference suppression, median filter, multistate approach, noise suppression, random processes, random valued impulse noise models, rank-ordered mean filter, rank-ordered pixels, Read only memory, simulations, sliding window, state variable, Switches, Training data, two-state approach, weighting coefficients},
+	pages = {1012--1025},
+	file = {IEEE Xplore Abstract Record:/home/will/Zotero/storage/LNSZCHH2/503916.html:text/html;IEEE Xplore Full Text PDF:/home/will/Zotero/storage/AVY6STAJ/Abreu et al. - 1996 - A new efficient approach for the removal of impuls.pdf:application/pdf}
+}
+
+@article{florencio_decision-based_1994,
+	title = {Decision-based median filter using local signal statistics},
+	volume = {2308},
+	doi = {10.1117/12.185969},
+	abstract = {Noise removal is important in many applications. When the noise has impulsive characteristics, linear techniques do not perform well, and median filter or its derivatives are often used. Although median-based filters preserve edges reasonably well, they tend to remove some of the finer details in the image. Switching schemes--where the filter is switched between two or more filters--have been proposed, but they usually lack a decision rule efficient enough to yield good results on different regions of the image. In this paper we present a strategy to overcome this problem. A decision rule based on the second order local statistics of the signal (within a window) is used to switch between the identity filter and a median filter. The results on a test image show an improvement of around 4 dB over the median filter alone, and 2 dB over other techniques.},
+	journal = {Proceedings of SPIE - The International Society for Optical Engineering},
+	author = {Florencio, Dinei and W. Schafer, Ronald},
+	month = sep,
+	year = {1994},
+	file = {Florencio and W. Schafer - 1994 - Decision-based median filter using local signal st.pdf:/home/will/Zotero/storage/8AHSDDVS/Florencio and W. Schafer - 1994 - Decision-based median filter using local signal st.pdf:application/pdf}
+}
+
+@article{besag_spatial_1974,
+	title = {Spatial {Interaction} and the {Statistical} {Analysis} of {Lattice} {Systems}},
+	volume = {36},
+	issn = {0035-9246},
+	url = {http://www.jstor.org/stable/2984812},
+	abstract = {The formulation of conditional probability models for finite systems of spatially interacting random variables is examined. A simple alternative proof of the Hammersley-Clifford theorem is presented and the theorem is then used to construct specific spatial schemes on and off the lattice. Particular emphasis is placed upon practical applications of the models in plant ecology when the variates are binary or Gaussian. Some aspects of infinite lattice Gaussian processes are discussed. Methods of statistical analysis for lattice schemes are proposed, including a very flexible coding technique. The methods are illustrated by two numerical examples. It is maintained throughout that the conditional probability approach to the specification and analysis of spatial interaction is more attractive than the alternative joint probability approach.},
+	number = {2},
+	urldate = {2018-05-17},
+	journal = {Journal of the Royal Statistical Society. Series B (Methodological)},
+	author = {Besag, Julian},
+	year = {1974},
+	pages = {192--236},
+	file = {Besag - 1974 - Spatial Interaction and the Statistical Analysis o.pdf:/home/will/Zotero/storage/NKXSPQI3/Besag - 1974 - Spatial Interaction and the Statistical Analysis o.pdf:application/pdf}
+}
+
+@article{woods_two-dimensional_1972,
+	title = {Two-dimensional discrete {Markovian} fields},
+	volume = {18},
+	issn = {0018-9448},
+	doi = {10.1109/TIT.1972.1054786},
+	abstract = {A definition of discrete Markovian random fields is formulated analogously to a definition for the continuous case given by Lévy. This definition in the homogeneous Gaussian case leads to a difference equation that sets forth the state of the field in terms of its values on a band of minimum widthP, wherePis the order of the process. The state of the field at position(i,j)is given by the set of values of the nearest neighbors within distancePof the point(i,j). Conversely, given a difference equation satisfying certain conditions relating to stability, there corresponds a homogeneous discrete Markov random field. This theory is applied to the problem of obtaining spectral estimates of a two-dimensional field, given observation over a limited aperture.},
+	number = {2},
+	journal = {IEEE Transactions on Information Theory},
+	author = {Woods, J.},
+	month = mar,
+	year = {1972},
+	keywords = {Markov processes, Multidimensional signal processing, Spectral analysis},
+	pages = {232--240},
+	file = {IEEE Xplore Abstract Record:/home/will/Zotero/storage/W8GQG9EI/1054786.html:text/html;IEEE Xplore Full Text PDF:/home/will/Zotero/storage/B5KJV8MH/Woods - 1972 - Two-dimensional discrete Markovian fields.pdf:application/pdf}
+}
+
+@book{kato_markov_2012,
+	title = {Markov {Random} {Fields} in {Image} {Segmentation}},
+	isbn = {978-1-60198-588-0},
+	url = {https://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=8187136},
+	abstract = {Markov Random Fields in Image Segmentation introduces the fundamentals of Markovian modeling in image segmentation as well as providing a brief overview of recent advances in the field. Segmentation is considered in a common framework, called image labeling, where the problem is reduced to assigning labels to pixels. In a probabilistic approach, label dependencies are modeled by Markov random fields (MRF) and an optimal labeling is determined by Bayesian estimation, in particular maximum a posteriori (MAP) estimation. The main advantage of MRF models is that prior information can be imposed locally through clique potentials. The primary goal is to demonstrate the basic steps to construct an easily applicable MRF segmentation model and further develop its multiscale and hierarchical implementations as well as their combination in a multilayer model. MRF models usually yield a non-convex energy function. The minimization of this function is crucial in order to find the most likely segme tation according to the MRF model. Besides classical optimization algorithms like simulated annealing or deterministic relaxation, this book also presents recently introduced graph cut-based algorithms. It discusses the possible parallelization techniques of simulated annealing, which allows efficient implementation on, for example, GPU hardware without compromising convergence properties of the algorithms. While the main focus of this monograph is on generic model construction and related energy minimization methods, many sample applications are also presented to demonstrate the applicability of these models in real life problems such as remote sensing, biomedical imaging, change detection, and color- and motion-based segmentation. In real-life applications, parameter estimation is an important issue when implementing completely data-driven algorithms. Therefore some basic procedures, such as expectation-maximization, are also presented in the context of color image segmentation. Mar ov Random Fields in Image Segmentation is an essential companion for students, researchers and practitioners working on, or about to embark on research in statistical image segmentation.},
+	urldate = {2018-05-18},
+	publisher = {Now Foundations and Trends},
+	author = {Kato, Zoltan},
+	year = {2012},
+	doi = {10.1561/2000000035},
+	keywords = {Electrical and Electronic Engineering, Imaging Analysis, Pattern Recognition},
+	file = {IEEE Xplore Abstract Record:/home/will/Zotero/storage/RLSQRH5U/articleDetails.html:text/html;Kato - 2012 - Markov Random Fields in Image Segmentation.pdf:/home/will/Zotero/storage/6EDKPVIZ/Kato - 2012 - Markov Random Fields in Image Segmentation.pdf:application/pdf}
 }
