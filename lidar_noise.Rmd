@@ -316,43 +316,6 @@ x=\frac{2b\pm\sqrt{b^{2}-4ac}}{2c}.
 
 For appendix figures and tables, special commands are needed to manually change the numbering to ensure that each appendix figure or table is numbered as part of the appendix and not as a continuation of the main paper. Use the command `\appendcaption{}` instead of the usual `\caption{}` to adjust the numbering; for example, for Table A1, you would use the command `\appendcaption{A1}`. In-text callouts for each appendix figure and table will need to be written as plain text;the usual `\ref{}` command cannot be used.
 
-\appendix[B]
-\appendixtitle{File Structure of the AMS \LaTeX\ Package}
-
-## AMS \LaTeX\ files
-You will be provided with a tarred, zipped \LaTeX\ package containing 3 files. These files are
-
-\begin{description}
-
-\item
-  your-paper-name.Rmd template for your paper
-\item
-  amstest.bib an example of a bibliographic database file.
-\item
-  figure01.pdf are sample figures.
-
-\end{description}
-
-## Help for Authors
-
-Questions and feedback concerning the use of the AMS \LaTeX\ files should be directed to latex@ametsoc.org or yufreecas@gmail.com(for rmarkdown issues). Additional information is available on the AMS \LaTeX\ Submission Info web page (\url{http://www2.ametsoc.org/ams/index.cfm/publications/authors/journal-and-bams-authors/author-resources/latex-author-info/}).
-
-\appendix[C]
-\appendixtitle{Building a PDF and Submitting Your \LaTeX\ Manuscript Files to the AMS}
-
-## Building your own PDF
-
-There are a variety of different methods and programs that will create a final PDF from your \LaTeX\ files. The easiest method is to download one of the freely available text editors/compilers such as Rstudio to compile your files into a PDF.
-
-## Submitting your files to the AMS for peer review
-
-The AMS uses the Editorial Manager system for all author submissions for peer review. Editorial Manager uses the freely available \TeX\ Live 2011 distribution. This system will automatically generate a PDF from your submitted \LaTeX\ files and figures(not Rmd file, tex files will be produced when you successful knit your Rmd file).  
-
-You should not upload your own PDF into the system. If the system does not build the PDF from your files correctly, refer to the AMS \LaTeX\ FAQ page first for possible solutions. If your PDF still does not build correctly after trying the solutions on the FAQ page, email latex@ametsoc.org for help.
-
-## Other software
-As mentioned above, there is a variety of software that can be used to edit .tex files and build a PDF.  The AMS does not support \LaTeX\/-related WYSIWYG software, such as Scientific Workplace, or WYSIWYM software, such as LyX.  \TeX\ Live (available online at \\ \url{http://www.tug.org/texlive/}) is recommended for users needing an up-to-date \LaTeX\ distribution with software that includes an editor and the ability to automatically generate a PDF.
-
 # References {-}
 \bibliography{references}
 
