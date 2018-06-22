@@ -7,3 +7,5 @@
 *.tex
 *.nc
 *~
+python_path.txt
+database.txt
