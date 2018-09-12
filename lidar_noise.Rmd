@@ -248,8 +248,8 @@ The hidden markov random field wind correlations are similar, with the exception
 library(reshape2)
 library(ggplot2)
 
-cnr_df = read.csv('data/cnr_stats.csv')
-hmrf_df = read.csv('data/hmrf_stats.csv')
+cnr_df = read.csv('validation/cnr_stats.csv')
+hmrf_df = read.csv('validation/hmrf_stats.csv')
 ranges = seq(100, 3000, by=25)
 
 corr_df = data.frame(Range=ranges, CNR=cnr_df$corr_u, HMRF=hmrf_df$corr_u)
