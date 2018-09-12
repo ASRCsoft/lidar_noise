@@ -38,7 +38,7 @@ if (file.exists('python_path.txt')) {
 } else {
   python_path = Sys.which('python3')
 }
-knitr::opts_chunk$set(echo = FALSE, eval = TRUE, cache = TRUE,
+knitr::opts_chunk$set(echo = FALSE, eval = TRUE, cache = FALSE,
                       engine.path = list(python = python_path))
 knitr::knit_engines$set(python = reticulate::eng_python)
 ```
@@ -159,7 +159,7 @@ import rasppy
 from scipy.ndimage import median_filter, gaussian_filter
 
 # get lidar data for LOS==0
-lidar = xr.open_dataset('cestm_roof80_20171003.nc')
+lidar = xr.open_dataset('cestm_roof80_20171003.nc').sel(Time=slice('2017-10-03 03:00', '2017-10-03 09:00'))
 lidar0 = lidar.rasp.los_format().sel(LOS=0)
 lidar0.swap_dims({'scan': 'Time'})
 
