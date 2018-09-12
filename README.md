@@ -11,7 +11,7 @@ install.packages(c('bookdown', 'rticles', 'reticulate', 'igraph', 'reshape2', 'g
 
 To install the required Python packages:
 
-```python
+```sh
 pip3 install numpy scipy xarray "git+https://github.com/ASRCsoft/raspPy.git@segmentation"
 ```
 The code expects a data file, `cestm_roof80_20171003.nc` (not included in the github repository), in the root folder.
