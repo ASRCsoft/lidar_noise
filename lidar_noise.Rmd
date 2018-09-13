@@ -25,11 +25,14 @@ output:
   bookdown::pdf_book:
     base_format: rticles::ams_article
 header-includes:
+  - \hypersetup{draft}
   - \usepackage{subfig}
   - \usepackage{booktabs}
   - \DeclareMathOperator{\median}{median}
   - \DeclareMathOperator{\filter}{filter}
 ---
+
+<!-- `\hypersetup{draft}` had to be included trying to avoid error possibly caused by references split across pages, as discussed here: https://www.overleaf.com/help/246-what-does-slash-pdfendlink-ended-up-in-different-nesting-level-than-slash-pdfstartlink-mean -->
 
 ```{r setup, echo=TRUE, include=FALSE}
 library(reticulate)
@@ -160,10 +163,44 @@ import numpy as np
 warnings.simplefilter("ignore")
 import xarray as xr
 import rasppy
+from rasppy.hmrf import make_segmentation, LidarSamples
 from scipy.ndimage import median_filter, gaussian_filter
+
+def make_segmentations(lidar, **seg_args):
+    # make segmentation objects for a lidar in DBS mode
+    lidar2 = lidar.rasp.los_format()
+    samples = []
+    for i in range(lidar2.dims['LOS']):
+        rws = lidar2['RWS'].sel(LOS=i).swap_dims({'scan': 'Time'})
+        cnr = lidar2['CNR'].sel(LOS=i).swap_dims({'scan': 'Time'})
+        samples.append(make_segmentation(rws, cnr, **seg_args))
+        
+    return samples
+
+def estimate_status(lidar, freeze=(), **seg_args):
+    '''Estimate measurement status using the HMRF model.'''
+    samples = make_segmentations(lidar, beta=.4)
+    ls = LidarSamples(samples)
+    ls.run(10, freeze=freeze)
+    
+    lidar2 = lidar.rasp.los_format()
+    lidar2['Status'] = (lidar2['RWS'].dims, np.empty(lidar2['RWS'].shape))
+    for i in range(lidar2.dims['LOS']):
+        lidar0 = lidar2.sel(LOS=i).swap_dims({'scan': 'Time'})
+        da = xr.concat([lidar0['RWS'], lidar0['CNR']], 'series').transpose('Time', 'Range', 'series')
+        scan_is_complete = ~np.isnan(da).any(['Range', 'series'])
+        scan_is_complete = scan_is_complete.swap_dims({'Time': 'scan'})
+        lidar2['Status'][:,scan_is_complete,i] = ls.samples[i].ppm[:,:,0].transpose()
+        lidar2['Status'][:,~scan_is_complete,i] = np.NaN
+        
+    lidar2['Status'].attrs['mu'] = ls.mu
+    lidar2['Status'].attrs['sigma'] = ls.sigma
+
+    return lidar2['Status'].stack(profile=['scan', 'LOS']).swap_dims({'profile': 'Time'}).drop('profile')
 
 # get lidar data for LOS==0
 lidar = xr.open_dataset('cestm_roof80_20171003.nc').sel(Time=slice('2017-10-03 03:00', '2017-10-03 09:00'))
+lidar['hmrf'] = estimate_status(lidar)
 lidar0 = lidar.rasp.los_format().sel(LOS=0)
 lidar0.swap_dims({'scan': 'Time'})
 
@@ -178,6 +215,10 @@ cnr = lidar0['CNR'].values
 fcnr = lidar0['filtered_CNR'].values
 times = lidar0.coords['Time'].values
 ranges = lidar0.coords['Range'].values
+
+rws_spike = lidar0['RWS'].where(np.abs(lidar0['RWS'] - lidar0['filtered_RWS']) < 1).values
+rws_cnr = lidar0['RWS'].where(lidar0['Status']).values
+rws_hmrf = lidar0['RWS'].where(lidar0['hmrf'] > .5).values
 ```
 
 ```{r filters, message=FALSE, fig.cap='Raw and filtered CNR and RWS values for October 3rd, 2017. a) Raw RWS values. b) Filtered RWS values. c) Raw CNR values. d) Filtered CNR values.', fig.subcap=c('', ''), fig.env="figure*", fig.width=3.17, fig.height=2, fig.ncol=2}
@@ -186,37 +227,36 @@ library(ggplot2)
 library(scales)
 library(viridis)
 
+melt_from_py = function(a) {
+  df = melt(a)
+  df$Range = py$ranges[df$Var1]
+  df$Time = py$times[df$Var2]
+  df
+}
+
 # get the data from python
-rws_df = melt(py$rws)
-rws_df$Range = py$ranges[rws_df$Var1]
-rws_df$Time = py$times[rws_df$Var2]
+rws_df = melt_from_py(py$rws)
 ggplot(rws_df, aes(x=Time, y=Range, fill=value, color=value)) + geom_tile() +
   scale_x_datetime('Hour [UTC]', date_labels='%H', expand = c(0, 0)) +
   scale_y_continuous('Range [m]', expand = c(0, 0)) +
   scale_fill_gradient2('RWS [m/s]', low=muted("blue"), high=muted("red"), limits = c(-5,5), oob=squish) +
   scale_color_gradient2('RWS [m/s]', low=muted("blue"), high=muted("red"), limits = c(-5,5), oob=squish)
 
-frws_df = melt(py$frws)
-frws_df$Range = py$ranges[frws_df$Var1]
-frws_df$Time = py$times[frws_df$Var2]
+frws_df = melt_from_py(py$frws)
 ggplot(frws_df, aes(x=Time, y=Range, fill=value, color=value)) + geom_tile() +
   scale_x_datetime('Hour [UTC]', date_labels='%H', expand = c(0, 0)) +
   scale_y_continuous('Range [m]', expand = c(0, 0)) +
   scale_fill_gradient2('RWS [m/s]', low=muted("blue"), high=muted("red"), limits = c(-5,5), oob=squish) +
   scale_color_gradient2('RWS [m/s]', low=muted("blue"), high=muted("red"), limits = c(-5,5), oob=squish)
 
-cnr_df = melt(py$cnr)
-cnr_df$Range = py$ranges[cnr_df$Var1]
-cnr_df$Time = py$times[cnr_df$Var2]
+cnr_df = melt_from_py(py$cnr)
 ggplot(cnr_df, aes(x=Time, y=Range, fill=value, color=value)) + geom_tile() +
   scale_x_datetime('Hour [UTC]', date_labels='%H', expand = c(0, 0)) +
   scale_y_continuous('Range [m]', expand = c(0, 0)) +
   scale_fill_viridis('CNR [dB]', limits=c(-35, -10), oob=squish) +
   scale_color_viridis('CNR [dB]', limits=c(-35, -10), oob=squish)
 
-fcnr_df = melt(py$fcnr)
-fcnr_df$Range = py$ranges[fcnr_df$Var1]
-fcnr_df$Time = py$times[fcnr_df$Var2]
+fcnr_df = melt_from_py(py$fcnr)
 ggplot(fcnr_df, aes(x=Time, y=Range, fill=value, color=value)) + geom_tile() +
   scale_x_datetime('Hour [UTC]', date_labels='%H', expand = c(0, 0)) +
   scale_y_continuous('Range [m]', expand = c(0, 0)) +
@@ -233,6 +273,28 @@ text_tbl = data.frame(RWS=c('$N(\\median_i, \\sigma^2)$',
                       row.names=c('Wind', 'Noise'))
 knitr::kable(text_tbl, booktabs=T, escape = F,
   caption = 'RWS and CNR distributions in different states.')
+```
+
+
+# Results
+
+30% more data, less noise
+
+```{r filtercomparison, message=FALSE, fig.cap='Results from RWS filters.', fig.env="figure*", fig.height=2, out.extra = ""}
+# have to include `out.extra = ""` in this chunk to convince rmarkdown to write
+# directly to latex
+spike_df = melt_from_py(py$rws_spike)
+spike_df$Filter = 'Spike'
+cnr_df = melt_from_py(py$rws_cnr)
+cnr_df$Filter = 'CNR Threshold'
+hmrf_df = melt_from_py(py$rws_hmrf)
+hmrf_df$Filter = 'HMRF'
+filter_df = rbind(spike_df, cnr_df, hmrf_df)
+ggplot(filter_df, aes(x=Time, y=Range, fill=value, color=value)) + geom_tile() +
+  scale_x_datetime('Hour [UTC]', date_labels='%H', expand = c(0, 0)) +
+  scale_y_continuous('Range [m]', expand = c(0, 0)) +
+  scale_fill_gradient2('RWS [m/s]', low=muted("blue"), high=muted("red"), limits = c(-5,5), oob=squish) +
+  scale_color_gradient2('RWS [m/s]', low=muted("blue"), high=muted("red"), limits = c(-5,5), oob=squish) + facet_wrap(~ Filter) + theme(panel.spacing = unit(1, "lines"))
 ```
 
 
