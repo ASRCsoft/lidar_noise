@@ -79,7 +79,7 @@ something about spike filters...
 
 Markov random fields are commonly used to model image segmentation problems [@li_markov_2009]. The models represent pixels as nodes in a regular network structure. Figure \@ref(fig:networks) shows two common network structures. Each node contains a hidden label which corresponds to an object in an image. Label transition probabilities from a node to a neighboring node are constant throughout the network, thus satisfying Markov properties.
 
-```{r networks, message=FALSE, fig.cap='Standard Markov random field structures. a) Order 1. b) Order 2.', fig.subcap=c('', ''), fig.env="figure*", fig.width=3.17, fig.height=2, fig.ncol=2}
+```{r networks, message=FALSE, fig.cap='Standard Markov random field structures. a) Order 1. b) Order 2.', fig.subcap=c('', ''), fig.width=1.5, fig.height=1.5, fig.ncol=2}
 library(igraph)
 
 ## the grid of nodes
