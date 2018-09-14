@@ -357,6 +357,17 @@ something about lakes and winds
 lidar researchers should borrow more from image research
 
 
+# References {-}
+
+<!-- this tells pandoc to add references here instead of at the end of the document -->
+<div id="refs"></div>
+
+
+# Appendix 1 {-}
+
+use order statistics to show reliability of median filter, citing @glueck_fast_2008
+
+
 <!-- # AMS formatting notes -->
 
 <!-- ## Secondary headings {-} -->
@@ -472,7 +483,7 @@ lidar researchers should borrow more from image research
 
 <!-- For appendix figures and tables, special commands are needed to manually change the numbering to ensure that each appendix figure or table is numbered as part of the appendix and not as a continuation of the main paper. Use the command `\appendcaption{}` instead of the usual `\caption{}` to adjust the numbering; for example, for Table A1, you would use the command `\appendcaption{A1}`. In-text callouts for each appendix figure and table will need to be written as plain text;the usual `\ref{}` command cannot be used. -->
 
-# References {-}
+<!-- # References {-} -->
 <!-- \bibliography{references} -->
 
 <!-- \begin{table} -->
