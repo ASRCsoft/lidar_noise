@@ -71,9 +71,9 @@ Current classification strategies for lidar data typically involve a combination
 
 Optimal signal strength thresholds can be calculated using detection theory. With information about the distribution of signal strengths in both signal and noise measurements, detection theory describes how to use the measurement's signal strength to derive the likelihood of a measurement being signal or noise. The expected number of false positives and false negatives can also be calculated for a given threshold choice. The chosen threshold is then determined by the relative cost of false positives and false negatives.
 
-Lidar wind estimates behave erratically in the presence of errors in the underlying radial wind speed estimates. This creates a substantial cost for noise incorrectly labeled as radial wind speeds. As a result wind lidar manufacturers set conservative signal strength thresholds that favor false negatives over false positives. The Leosphere WindCube 100S wind lidar selects a threshold to achieve a false alarm rate of 0.25%. This choice minimizes incorrect wind estimates at the cost of a substantial amount of false negatives.
+Lidar wind estimates behave erratically in the presence of errors in the underlying radial wind speed estimates. This creates a substantial cost for noise incorrectly labeled as radial wind speeds. As a result wind lidar manufacturers set conservative signal strength thresholds that favor false negatives over false positives. The Leosphere WindCube 100S wind lidar selects a threshold to achieve a false alarm rate of 0.25%, which usually requires a threshold at about -27 dB for vertical or near-vertical scans. This choice produces few incorrect wind estimates at the cost of a substantial number of false negatives.
 
-something about spike filters...
+Spike filters can also be applied to remove noise in combination with another filter. Though they can be useful, a spike filter is inadequate by itself. In data regions dominated by noise, a spike filter can't correctly identify spikes and will generate an unacceptably high number of false positives (see figure \@ref(fig:filterComparison)). This limits the usefulness of spike filters in lidar scans with significant regions of noise.
 
 
 ## Hidden Markov Random Fields
@@ -310,7 +310,7 @@ The model can be solved with existing hidden Markov random field algorithms. We 
 
 30% more data, less noise
 
-```{r filtercomparison, message=FALSE, fig.cap='Results from RWS filters.', fig.env="figure*", fig.height=2, out.extra = ""}
+```{r filterComparison, message=FALSE, fig.cap='Measurements classified as wind using a signal strength threshold, a hidden Markov random field model, and a spike filter.', fig.env="figure*", fig.height=2, out.extra = ""}
 # have to include `out.extra = ""` in this chunk to convince rmarkdown to write
 # directly to latex
 spike_df = melt_from_py(py$rws_spike)
