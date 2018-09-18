@@ -78,7 +78,7 @@ Spike filters can also be applied to remove noise in combination with another fi
 
 ## Hidden Markov Random Fields
 
-Markov random fields are commonly used to model image segmentation problems [@li_markov_2009]. The models represent pixels as nodes in a regular network structure. Figure \@ref(fig:networks) shows two common network structures. Each node contains a hidden label which corresponds to an object in an image. Label transition probabilities from a node to a neighboring node are constant throughout the network, thus satisfying Markov properties.
+Markov random fields are commonly used to model image segmentation problems [@geman_stochastic_1984; @besag_statistical_1986; @li_markov_2009]. The models represent pixels as nodes in a regular lattice structure. Figure \@ref(fig:networks) shows two common network structures. Each node contains a hidden label which corresponds to an object or a section in an image. Label transition probabilities from a node to a neighboring node are constant throughout the network, thus satisfying Markov properties.
 
 ```{r networks, message=FALSE, fig.cap='Standard Markov random field structures. a) Order 1. b) Order 2.', fig.subcap=c('', ''), fig.width=1.5, fig.height=1.5, fig.ncol=2}
 library(igraph)
@@ -128,10 +128,14 @@ Observed pixel values are drawn from label-dependent random distributions. The p
 
 <!-- For example, neuroimaging researchers use markov random fields to identify brain regions in MRI data, modeling each region as a distinct data generating process with values drawn from a Gaussian distribution. The markov random field incorporates spatial relationships between the voxels to produce more coherent classifications. -->
 
-Existing methods from image segmentation research can estimate hidden markov random field models without autocorrelated error terms. However markov random field models with autocorrelated error terms are intractable. Therefore to estimate the model we have to remove the autocorrelated error terms.
+<!-- Existing methods from image segmentation research can estimate hidden markov random field models without autocorrelated error terms. However markov random field models with autocorrelated error terms are intractable. Therefore to estimate the model we have to remove the autocorrelated error terms. -->
 
 
 ## Image Denoising
+
+Image processing researchers have created a large literature on image denoising.
+
+The median filter 
 
 A wide variety of filters for predicting local pixel values are available in image processing research which we could potentially use to estimate local space/time error terms. We choose the median filter due to its robustness to “salt and pepper” noise. Salt and pepper noise in degraded images takes on extreme high (white salt) and low (black pepper) values. Typically the median filter is used to replace salt and pepper noise pixels with a more reasonable value derived from neighboring pixels. Given the extreme variance of radial wind speed noise measurements, methods designed for salt and pepper noise hold promise for dealing with lidar noise.
 
