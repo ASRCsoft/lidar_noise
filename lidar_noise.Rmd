@@ -30,7 +30,17 @@ header-includes:
   - \usepackage{booktabs}
   - \DeclareMathOperator{\median}{median}
   - \DeclareMathOperator{\gauss}{gauss}
+  - \DeclareMathOperator{\per}{per}
 ---
+
+<!-- Trying to get a proper underbrace on the bottom of a matrix. Failing so far... -->
+\newcommand\undermat[2]{% http://tex.stackexchange.com/a/102468/5764
+  \makebox[0pt][l]{$\smash{\underbrace{\phantom{%
+    \begin{matrix}#1\end{matrix}}}_{\text{$#2$}}}$}#1}
+
+\newlength{\bracewidth}
+
+\newcommand{\myunderbrace}[2]{\settowidth{\bracewidth}{$#1$}#1\hspace*{-1\bracewidth}\smash{\underbrace{\makebox{\phantom{$#1$}}}_{#2}}}
 
 <!-- `\hypersetup{draft}` had to be included trying to avoid error possibly caused by references split across pages, as discussed here: https://www.overleaf.com/help/246-what-does-slash-pdfendlink-ended-up-in-different-nesting-level-than-slash-pdfstartlink-mean -->
 
@@ -373,7 +383,57 @@ lidar researchers should borrow more from image research
 
 # Appendix 1 {-}
 
+@bapat_order_1989 show that the cumulative distribution function for the median of a collection of non-identically distributed random variables is
+$$
+P(Y_r \leq y) = \sum_{i=r}^{n} \frac{1}{i! (n-i)!} \per
+(\begin{bmatrix}
+F_1(y) & 1-F_1(y)\\
+\vdots & \vdots\\
+\underbrace{F_n(y)}_{i} & \underbrace{1-F_n(y)}_{n-i}\\
+\end{bmatrix})
+$$
+
 use order statistics to show reliability of median filter, citing @glueck_fast_2008
+
+```{r median, fig.cap='Probability of ___ for different wind speeds and numbers of noise measurements.', fig.width=3.17, fig.height=2.5, eval=F}
+# return the binomial coefficients for a set of n choices
+binomial_coefs = function(n) {
+  choose(n, 0:n)
+}
+
+# get all combinations of wind and noise along with their corresponding binomial
+# coefficients
+get_combos = function(fwind, fnoise, n, n_wind, n_noise) {
+  min_noise = max(n - n_wind, 0)
+  min_wind = max(n - n_noise, 0)
+  prange = n - min_noise - min_wind
+  noise_powers = min_noise + 0:prange
+  wind_powers = min_wind + prange:0
+  bcoefs = binomial_coefs(prange) * factorial(min_wind) * factorial(min_noise)
+  values = fwind^wind_powers * fnoise^noise_powers
+  data.frame(coefs = bcoefs, values = values)
+}
+
+# get the permanent of a matrix with n measurements k of which are wind and
+# CDF_wind(y)=fwind and CDF_noise(y)=fnoise and where the median is less than y
+# and the next highest number if greater than y
+permanent = function(fwind, fnoise, n, k) {
+  n_wind = k
+  n_noise = n - k
+  n_low = ceiling(n / 2)
+  n_high = n - n_low
+  min_low_noise = n_low - n_wind
+  min_high_noise = n_high - n_wind
+  
+  # get all combinations of low wind and low noise along with their binomial
+  # coefficients
+  low_df = get_combos(fwind, fnoise, n_low, n_wind, n_noise)
+  
+  # get all combinations of high wind and high noise along with their binomial
+  # coefficients
+  high_df = get_combos(fwind, fnoise, n_high, n_wind, n_noise)
+}
+```
 
 
 <!-- # AMS formatting notes -->
