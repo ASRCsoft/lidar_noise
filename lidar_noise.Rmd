@@ -409,21 +409,18 @@ get_combos = function(fwind, fnoise, n, n_wind, n_noise) {
   prange = n - min_noise - min_wind
   noise_powers = min_noise + 0:prange
   wind_powers = min_wind + prange:0
-  bcoefs = binomial_coefs(prange) * factorial(min_wind) * factorial(min_noise)
+  # bcoefs = binomial_coefs(prange) * factorial(min_wind) * factorial(min_noise)
+  bcoefs = binomial_coefs(prange) * factorial(min_wind + min_noise)
   values = fwind^wind_powers * fnoise^noise_powers
-  data.frame(coefs = bcoefs, values = values)
+  data.frame(nwind = wind_powers, coefs = bcoefs, values = values)
 }
 
-# get the permanent of a matrix with n measurements k of which are wind and
-# CDF_wind(y)=fwind and CDF_noise(y)=fnoise and where the median is less than y
-# and the next highest number if greater than y
-permanent = function(fwind, fnoise, n, k) {
-  n_wind = k
-  n_noise = n - k
-  n_low = ceiling(n / 2)
+# get the permanent of a matrix with n measurements k of which are wind and r of
+# which are <= y and CDF_wind(y)=fwind and CDF_noise(y)=fnoise
+permanent = function(fwind, fnoise, n, n_wind, r) {
+  n_noise = n - n_wind
+  n_low = r
   n_high = n - n_low
-  min_low_noise = n_low - n_wind
-  min_high_noise = n_high - n_wind
   
   # get all combinations of low wind and low noise along with their binomial
   # coefficients
@@ -431,8 +428,31 @@ permanent = function(fwind, fnoise, n, k) {
   
   # get all combinations of high wind and high noise along with their binomial
   # coefficients
-  high_df = get_combos(fwind, fnoise, n_high, n_wind, n_noise)
+  high_df = get_combos(1 - fwind, 1 - fnoise, n_high, n_wind, n_noise)
+  
+  # merge, matching # of wind measurements
+  high_df$wind_needed = n_wind - high_df$nwind
+  high_df$nwind = NULL # avoid warning message
+  df = merge(low_df, high_df, by.x = 'nwind', by.y = 'wind_needed')
+  pmat = as.matrix(df[, c('coefs.x', 'values.x', 'coefs.y', 'values.y')])
+  sum(apply(pmat, 1, prod))
 }
+
+median_cdf1 = function(fwind, fnoise, n, nwind, r) {
+  (1 / (factorial(r) * factorial(n - r))) * permanent(fwind, fnoise, n, nwind, r)
+}
+
+median_cdf = function(wind_cdf, noise_cdf, y, n, nwind) {
+  # only looking for the median at the moment
+  i = ceiling(median(1:n))
+  fwind = wind_cdf(y)
+  fnoise = noise_cdf(y)
+  sum(sapply(i:n, function(x) median_cdf1(fwind, fnoise, n, nwind, x)))
+}
+
+Fwind = function(y) pnorm(y, 0, .5)
+Fnoise = function(y) punif(y, -30, 30)
+
 ```
 
 
