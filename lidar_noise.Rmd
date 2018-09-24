@@ -395,23 +395,33 @@ $$
 
 use order statistics to show reliability of median filter, citing @glueck_fast_2008
 
-```{r median, fig.cap='Probability of ___ for different wind speeds and numbers of noise measurements.', fig.width=3.17, fig.height=2.5, eval=F}
-# return the binomial coefficients for a set of n choices
-binomial_coefs = function(n) {
-  choose(n, 0:n)
-}
+```{r median, fig.cap='Probability of median within .5m/s for different wind speeds and numbers of noise measurements.', fig.width=3.17, fig.height=3.5}
+# logsumexp
+logsumexp = function(x) log(sum(exp(x - max(x)))) + max(x)
 
 # get all combinations of wind and noise along with their corresponding binomial
 # coefficients
-get_combos = function(fwind, fnoise, n, n_wind, n_noise) {
-  min_noise = max(n - n_wind, 0)
-  min_wind = max(n - n_noise, 0)
-  prange = n - min_noise - min_wind
-  noise_powers = min_noise + 0:prange
-  wind_powers = min_wind + prange:0
-  # bcoefs = binomial_coefs(prange) * factorial(min_wind) * factorial(min_noise)
-  bcoefs = binomial_coefs(prange) * factorial(min_wind + min_noise)
+get_combos = function(fwind, fnoise, n, n_wind, n_low) {
+  # notes:
+  # want to get frequency of noise frequencies in those combos
+  n_noise = n - n_wind
+  min_wind = max(n_low - n_noise, 0)
+  max_wind = min(n_low, n_wind)
+  wind_powers = min_wind:max_wind
+  noise_powers = n_low - wind_powers
+  bcoefs = dhyper(wind_powers, n_wind, n_noise, n_low) * choose(n, n_low)
   values = fwind^wind_powers * fnoise^noise_powers
+  data.frame(nwind = wind_powers, coefs = bcoefs, values = values)
+}
+
+get_lcombos = function(lfwind, lfnoise, n, n_wind, n_low) {
+  n_noise = n - n_wind
+  min_wind = max(n_low - n_noise, 0)
+  max_wind = min(n_low, n_wind)
+  wind_powers = min_wind:max_wind
+  noise_powers = n_low - wind_powers
+  bcoefs = dhyper(wind_powers, n_wind, n_noise, n_low, log=T) + lchoose(n, n_low)
+  values = lfwind * wind_powers + lfnoise * noise_powers
   data.frame(nwind = wind_powers, coefs = bcoefs, values = values)
 }
 
@@ -424,24 +434,51 @@ permanent = function(fwind, fnoise, n, n_wind, r) {
   
   # get all combinations of low wind and low noise along with their binomial
   # coefficients
-  low_df = get_combos(fwind, fnoise, n_low, n_wind, n_noise)
+  low_df = get_combos(fwind, fnoise, n, n_wind, n_low)
+  df = low_df
+  df$coefs.y = factorial(n_high)
+  df$nwind.y = n_wind - df$nwind
+  df$values.y = (1 - fwind)^df$nwind.y * (1 - fnoise)^(n_high - df$nwind.y)
   
-  # get all combinations of high wind and high noise along with their binomial
-  # coefficients
-  high_df = get_combos(1 - fwind, 1 - fnoise, n_high, n_wind, n_noise)
+  mfactor = factorial(n) / sum(df$coefs * df$coefs.y)
+  df$coefs = df$coefs * mfactor
+  # df$coefs = df$coefs * factorial(n_high)
   
-  # merge, matching # of wind measurements
-  high_df$wind_needed = n_wind - high_df$nwind
-  high_df$nwind = NULL # avoid warning message
-  df = merge(low_df, high_df, by.x = 'nwind', by.y = 'wind_needed')
-  pmat = as.matrix(df[, c('coefs.x', 'values.x', 'coefs.y', 'values.y')])
+  pmat = as.matrix(df[, c('coefs', 'values', 'coefs.y', 'values.y')])
   sum(apply(pmat, 1, prod))
 }
 
+lpermanent = function(lfwind, lfnoise, n, n_wind, r) {
+  n_noise = n - n_wind
+  n_low = r
+  n_high = n - n_low
+  
+  # get all combinations of low wind and low noise along with their binomial
+  # coefficients
+  low_df = get_lcombos(lfwind, lfnoise, n, n_wind, n_low)
+  df = low_df
+  df$coefs.y = lfactorial(n_high)
+  df$nwind.y = n_wind - df$nwind
+  df$values.y = log(1 - exp(lfwind)) * df$nwind.y + log(1 - exp(lfnoise)) * (n_high - df$nwind.y)
+  
+  mfactor = lfactorial(n) - logsumexp(df$coefs + df$coefs.y)
+  df$coefs = df$coefs + mfactor
+  # df$coefs = df$coefs * factorial(n_high)
+  
+  pmat = as.matrix(df[, c('coefs', 'values', 'coefs.y', 'values.y')])
+  logsumexp(rowSums(pmat))
+}
+
+# the probability that r measurements are <=y and (n - r) measurements are >y
 median_cdf1 = function(fwind, fnoise, n, nwind, r) {
   (1 / (factorial(r) * factorial(n - r))) * permanent(fwind, fnoise, n, nwind, r)
 }
 
+median_lcdf1 = function(lfwind, lfnoise, n, nwind, r) {
+  lpermanent(lfwind, lfnoise, n, nwind, r) - lfactorial(r) - lfactorial(n - r)
+}
+
+# probability that >=r measurements are <=y, i.e. P(Y_r <= y)
 median_cdf = function(wind_cdf, noise_cdf, y, n, nwind) {
   # only looking for the median at the moment
   i = ceiling(median(1:n))
@@ -450,9 +487,62 @@ median_cdf = function(wind_cdf, noise_cdf, y, n, nwind) {
   sum(sapply(i:n, function(x) median_cdf1(fwind, fnoise, n, nwind, x)))
 }
 
-Fwind = function(y) pnorm(y, 0, .5)
-Fnoise = function(y) punif(y, -30, 30)
+median_lcdf = function(wind_cdf, noise_cdf, y, n, nwind) {
+  # only looking for the median at the moment
+  i = ceiling(median(1:n))
+  lfwind = wind_cdf(y, log = T)
+  lfnoise = noise_cdf(y, log = T)
+  exp(logsumexp(sapply(i:n, function(x) median_lcdf1(lfwind, lfnoise, n, nwind, x))))
+}
 
+Fwind = function(y, mean = 0, sd = .5, ...) pnorm(y, mean, sd, ...)
+Fnoise = function(y, min = -30, max = 30, ...) punif(y, min, max, ...)
+
+# median_plot = function(y) sapply(y, function(x) median_cdf(Fwind, Fnoise, x, 31, 10))
+# curve(median_plot, -2, 2)
+# 
+# median_lplot = function(y) sapply(y, function(x) median_lcdf(Fwind, Fnoise, x, 31, 10))
+# curve(median_lplot, -2, 2)
+# 
+# median1_plot = function(y) sapply(y, function(x) median_cdf1(Fwind(x), Fnoise(x), 31, 10, 16))
+# curve(median1_plot, -35, 35)
+# 
+# median1_lplot = function(y) exp(sapply(y, function(x) median_lcdf1(Fwind(x, log = T), Fnoise(x, log = T), 31, 10, 31)))
+# curve(median1_lplot, -35, 35)
+# 
+# perm_plot = function(x) sapply(x, function(y) permanent(Fwind(y), Fnoise(y), 31, 10, 16))
+# curve(perm_plot, -1, 1)
+
+# want a plot, y=percent wind state, x=actual wind speed, of probability median is within .5m/s of the actual wind speed
+# p_median_within_range = function(wind, noise, speed) {
+#   n = wind + noise
+#   Fwind = function(y) pnorm(y, speed, .5)
+#   Fnoise = function(y) punif(y, -30, 30)
+#   
+#   median_cdf(Fwind, Fnoise, speed + .5, n, wind) - median_cdf(Fwind, Fnoise, speed - .5, n, wind)
+# }
+
+p_median_within_range = function(n, wind, speed) {
+  Fwind = function(y, ...) pnorm(y, speed, .5, ...)
+  Fnoise = function(y, ...) punif(y, -30, 30, ...)
+  median_lcdf(Fwind, Fnoise, speed + .5, n, wind) - median_lcdf(Fwind, Fnoise, speed - .5, n, wind)
+}
+
+n_measurements = 400
+top_percent = 30
+xs = seq(-5, 5, 1)
+ys = seq(0, top_percent, 5) * n_measurements / 100
+# zs = sapply(xs, function(y) p_median_within_range(20, 380, y))
+
+m0 = matrix(NA, nrow = length(ys), ncol = length(xs))
+zs0 = mapply(function(nwind, y) p_median_within_range(n_measurements, nwind, y), ys[row(m0)], xs[col(m0)])
+zs = matrix(zs0, nrow = length(ys), ncol = length(xs))
+# image(t(zs1))
+
+par(mar=c(4.1, 4.1, .1, .1))
+contour(xs, ys / (n_measurements / 100), t(zs), levels = c(.01, .05, .1, .25, .5, .75, .9, .95, .99),
+        xlab='Wind Speed', ylab='Percent of measurements in wind state')
+grid()
 ```
 
 
