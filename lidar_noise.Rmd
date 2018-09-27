@@ -38,7 +38,7 @@ if (file.exists('python_path.txt')) {
 } else {
   python_path = Sys.which('python3')
 }
-knitr::opts_chunk$set(echo = FALSE, eval = TRUE, cache = TRUE,
+knitr::opts_chunk$set(echo = FALSE, eval = TRUE, cache = FALSE,
                       engine.path = list(python = python_path))
 knitr::knit_engines$set(python = reticulate::eng_python)
 ```
