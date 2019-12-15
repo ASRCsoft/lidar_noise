@@ -31,6 +31,10 @@ header-includes:
   - \DeclareMathOperator{\median}{median}
   - \DeclareMathOperator{\gauss}{gauss}
   - \DeclareMathOperator{\per}{per}
+vignette: >
+  %\VignetteIndexEntry{Paper}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 <!-- Trying to get a proper underbrace on the bottom of a matrix. Failing so far... -->
