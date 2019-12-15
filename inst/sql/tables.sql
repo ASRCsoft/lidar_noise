@@ -115,6 +115,16 @@ select create_hypertable('profiles', 'time', chunk_time_interval => interval '1 
 -- -- create table lidar30m (scan_id smallint not null, time timestamp not null, tke real[], alpha real[], primary key(scan_id, time), foreign key(scan_id) references scans);
 
 
+-- HMRF wind tables-- what do I do with this?
+
+-- create table status (scan_id smallint not null references scans, time timestamp not null, status boolean[], hmrf real[], primary key(scan_id, time));
+-- -- make hypertable
+-- select create_hypertable('status', 'time');
+
+-- create table hmrf5m (scan_id smallint not null references scans, time timestamp not null, xwind real[], ywind real[], zwind real[], primary key(scan_id, time));
+-- select create_hypertable('hmrf5m', 'time');
+
+
 -- radiosonde data
 create schema radiosonde;
 create table radiosonde.releases (
