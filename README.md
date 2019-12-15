@@ -3,12 +3,6 @@ Accurately classify lidar measurements as either wind or noise using a hidden ma
 
 ## Setup
 
-To install the required R packages:
-
-```R
-install.packages(c('bookdown', 'rticles', 'reticulate', 'igraph', 'reshape2', 'ggplot2', 'scales', 'viridis'))
-```
-
 To install the required Python packages:
 
 ```sh
