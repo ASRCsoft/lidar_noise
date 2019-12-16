@@ -211,7 +211,7 @@ def estimate_status(lidar, freeze=(), **seg_args):
     return lidar2['Status'].stack(profile=['scan', 'LOS']).swap_dims({'profile': 'Time'}).drop('profile')
 
 # get lidar data for LOS==0
-lidar = xr.open_dataset('cestm_roof80_20171003.nc').sel(Time=slice('2017-10-03 03:00', '2017-10-03 09:00'))
+lidar = xr.open_dataset('cestm_roof80_20171003.nc').sel(Time=slice('2017-10-03 06:00', '2017-10-03 09:00'))
 lidar['hmrf'] = estimate_status(lidar)
 lidar0 = lidar.rasp.los_format().sel(LOS=0)
 lidar0.swap_dims({'scan': 'Time'})
