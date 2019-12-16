@@ -174,8 +174,8 @@ import warnings
 import numpy as np
 warnings.simplefilter("ignore")
 import xarray as xr
-import rasppy
-from rasppy.hmrf import make_segmentation, LidarSamples
+import wxprofilers
+from wxprofilers._hmrf import make_segmentation, LidarSamples
 from scipy.ndimage import median_filter, gaussian_filter
 
 def make_segmentations(lidar, **seg_args):
