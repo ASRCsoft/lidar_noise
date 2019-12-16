@@ -11,3 +11,5 @@ python_path.txt
 database.txt
 vignettes/*_cache/*
 inst/doc
+doc
+Meta

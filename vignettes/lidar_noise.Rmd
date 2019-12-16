@@ -49,6 +49,7 @@ vignette: >
 <!-- `\hypersetup{draft}` had to be included trying to avoid error possibly caused by references split across pages, as discussed here: https://www.overleaf.com/help/246-what-does-slash-pdfendlink-ended-up-in-different-nesting-level-than-slash-pdfstartlink-mean -->
 
 ```{r setup, echo=TRUE, include=FALSE}
+library(lidarnoise)
 library(reticulate)
 if (file.exists('python_path.txt')) {
   python_path = readLines('python_path.txt')[1]
@@ -356,11 +357,11 @@ The hidden markov random field wind correlations are similar, with the exception
 library(reshape2)
 library(ggplot2)
 
-cnr_df = read.csv('validation/cnr_stats.csv')
-hmrf_df = read.csv('validation/hmrf_stats.csv')
+data(cnr_stats)
+data(hmrf_stats)
 ranges = seq(100, 3000, by=25)
 
-corr_df = data.frame(Range=ranges, CNR=cnr_df$corr_u, HMRF=hmrf_df$corr_u)
+corr_df = data.frame(Range=ranges, CNR=cnr_stats$corr_u, HMRF=hmrf_stats$corr_u)
 lcorr = melt(corr_df, id.vars='Range', variable.name='Method',
              value.name='Correlation Coefficient')
 names(lcorr)[1] = 'Range [m]'
