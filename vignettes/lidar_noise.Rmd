@@ -165,7 +165,7 @@ The first lidar began testing in April 2015. All lidars were deployed to their r
 
 # Model
 
-```{python}
+```{python include = FALSE}
 # add the current folder to the import path
 import sys
 sys.path.append('.')
