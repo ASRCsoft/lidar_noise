@@ -15,15 +15,16 @@ Imports:
     rticles,
     scales,
     viridis
-Depends: R (>= 3.4.4)
-SystemRequirements:
-    PostgreSQL,
-    Python (>=3)
+Depends:
+    R (>= 3.4.4),
+    etl
+SystemRequirements: Python (>=3)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    RSQLite
 VignetteBuilder: knitr
