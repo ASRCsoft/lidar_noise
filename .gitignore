@@ -13,3 +13,5 @@ vignettes/*_cache/*
 inst/doc
 doc
 Meta
+*.sqlite3
+*.ipynb
